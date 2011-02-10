@@ -27,7 +27,9 @@ namespace NumberTheoryLong
             nt mask;
             nt res = 1;
 
-            for (mask = (~nt.MaxValue >> 1) & nt.MaxValue; (mask & n)== 0; mask >>= 1) ;
+            for (mask = (~nt.MaxValue >> 1) & nt.MaxValue; (mask & n)== 0; mask >>= 1)
+            {
+            }
 
             while ((mask & n) == 0)
             {
