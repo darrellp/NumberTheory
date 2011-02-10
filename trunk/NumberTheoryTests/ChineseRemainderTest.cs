@@ -2,20 +2,21 @@
 
 #if BIGINTEGER
 using NumberTheoryBig;
+using nt = System.Numerics.BigInteger;
 #else
 using NumberTheoryLong;
+using nt = System.Int64;
 #endif
 
 namespace NumberTheoryTests
 {
     [TestClass]
-    public class PowerModTests
+    public class ChineseRemainderTests
     {
         [TestMethod]
-        public void PowerModTest()
+        public void TestChineseRemainder()
         {
-            Assert.AreEqual(3115, PowerMod.Power(2357, 2357, 3599));
-            Assert.AreEqual(5,PowerMod.Power(7,-1,17));
+            Assert.AreEqual(103, ChineseRemainder.CRT(new nt[] {1,3,5}, new nt[] {3,5,7}));
         }
     }
 }
