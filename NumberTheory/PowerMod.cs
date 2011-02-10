@@ -12,6 +12,7 @@ namespace NumberTheory
         static public nt Power(nt x, nt n, nt mod)
         {
 #if BIGINTEGER
+            // TODO: Doesn't handle negative powers correctly
             return BigInteger.ModPow(x, n, mod);
 #else
             if (n == 0)
