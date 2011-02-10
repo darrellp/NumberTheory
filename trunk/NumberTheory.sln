@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberTheory", "NumberTheory\NumberTheory.csproj", "{83C3C980-C917-471D-995E-D91E327C7004}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberTheoryTests", "NumberTheoryTests\NumberTheoryTests.csproj", "{D0021046-DD30-419C-9786-010F5684E775}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EDF3BBD6-3BA8-4A62-8545-E3D86C173407}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		NumberTheory.vsmdi = NumberTheory.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = NumberTheory.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		BigIntegerDbg|Any CPU = BigIntegerDbg|Any CPU
+		BigIntegerRls|Any CPU = BigIntegerRls|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		LongDbg|Any CPU = LongDbg|Any CPU
+		LongRls|Any CPU = LongRls|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83C3C980-C917-471D-995E-D91E327C7004}.BigIntegerDbg|Any CPU.ActiveCfg = BigIntegerDbg|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.BigIntegerDbg|Any CPU.Build.0 = BigIntegerDbg|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.BigIntegerRls|Any CPU.ActiveCfg = BigIntegerRls|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.BigIntegerRls|Any CPU.Build.0 = BigIntegerRls|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.LongDbg|Any CPU.ActiveCfg = LongDbg|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.LongDbg|Any CPU.Build.0 = LongDbg|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.LongRls|Any CPU.ActiveCfg = LongRls|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.LongRls|Any CPU.Build.0 = LongRls|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83C3C980-C917-471D-995E-D91E327C7004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.BigIntegerDbg|Any CPU.ActiveCfg = BigIntegerDbg|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.BigIntegerDbg|Any CPU.Build.0 = BigIntegerDbg|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.BigIntegerRls|Any CPU.ActiveCfg = BigIntegerRls|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.BigIntegerRls|Any CPU.Build.0 = BigIntegerRls|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.LongDbg|Any CPU.ActiveCfg = LongDbg|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.LongDbg|Any CPU.Build.0 = LongDbg|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.LongRls|Any CPU.ActiveCfg = LongRls|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.LongRls|Any CPU.Build.0 = LongRls|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0021046-DD30-419C-9786-010F5684E775}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+EndGlobal
