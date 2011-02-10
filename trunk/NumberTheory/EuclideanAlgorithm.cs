@@ -90,7 +90,7 @@ namespace NumberTheory
                 {
                     ret[i] += ((mod - 1 - ret[i])/mod)*mod;
                 }
-        }
+            }
 
             return ret;
         }
