@@ -48,5 +48,25 @@ namespace NumberTheoryTests
                 Assert.AreEqual(500, sln[0]*13 + sln[1]*51);
             }
         }
+
+        [TestMethod]
+        public void TestLinearCongruenceSolve()
+        {
+#if BIGINTEGER
+            var a = 6123123;
+            var b = 6123123123;
+            var mod = 9123123123123;
+#else
+            var a = 123;
+            var b = 9123;
+            var mod = 321123;
+#endif
+            var solns = euc.LinearCongruenceSolve(a,b,mod);
+            Assert.AreEqual(3, solns.Length);
+            foreach (var isoln in solns)
+            {
+                Assert.AreEqual(b, a * isoln % mod);
+            }
+        }
     }
 }

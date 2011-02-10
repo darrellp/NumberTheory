@@ -34,30 +34,65 @@ namespace NumberTheory
 
         public static Func<nt,nt[]> DiophantineSolve(nt a, nt b, nt c)
         {
-            var ext = new EuclideanExt(a,b);
+            nt gcd;
 
-            if (c % ext.GCD != 0)
+            return DiophantineSolve(a, b, c, out gcd);
+        }
+
+        public static Func<nt, nt[]> DiophantineSolve(nt a, nt b, nt c, out nt gcd)
+        {
+            var ext = new EuclideanExt(a, b);
+            gcd = ext.GCD;
+
+            if (c % gcd != 0)
             {
                 return null;
             }
 
-            var cnst1 = c * ext.Coeff1 / ext.GCD;
-            var cnst2 = c * ext.Coeff2 / ext.GCD;
-            var cf1 = b / ext.GCD;
-            var cf2 = -a / ext.GCD;
+            var cnst1 = c * ext.Coeff1 / gcd;
+            var cnst2 = c * ext.Coeff2 / gcd;
+            var cf1 = b / gcd;
+            var cf2 = -a / gcd;
             nt q;
 
             if (TypeAdaptation.Abs(cnst1) > TypeAdaptation.Abs(cnst2))
             {
-                q = cnst1/cf1;
+                q = cnst1 / cf1;
             }
             else
             {
-                q = cnst2/cf2;
+                q = cnst2 / cf2;
             }
-            cnst1 -= q*cf1;
-            cnst2 -= q*cf2;
-            return i => new[] {cf1 * i + cnst1, cf2 * i + cnst2};
+            cnst1 -= q * cf1;
+            cnst2 -= q * cf2;
+            return i => new[] { cf1 * i + cnst1, cf2 * i + cnst2 };
+        }
+
+        public static nt[] LinearCongruenceSolve(nt a, nt b, nt mod)
+        {
+            nt gcd;
+            var fnSolns = DiophantineSolve(a, mod, b, out gcd);
+            if (fnSolns == null || gcd > int.MaxValue)
+            {
+                return null;
+            }
+
+            var ret = new nt[(int)gcd];
+            for (var i = 0; i < gcd; i++)
+            {
+                var sln = fnSolns(i);
+                ret[i] = sln[0];
+                if (ret[i] > mod)
+                {
+                    ret[i] -= (ret[i]/mod)*mod;
+                }
+                else if (ret[i] < 0)
+                {
+                    ret[i] += ((mod - 1 - ret[i])/mod)*mod;
+                }
+        }
+
+            return ret;
         }
     }
 }
