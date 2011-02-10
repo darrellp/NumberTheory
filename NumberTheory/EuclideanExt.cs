@@ -5,7 +5,11 @@ using nt = System.Numerics.BigInteger;
 using nt = System.Int64;
 #endif
 
-namespace NumberTheory
+#if BIGINTEGER
+namespace NumberTheoryBig
+#elif LONG
+namespace NumberTheoryLong
+#endif
 {
     public class EuclideanExt
     {
