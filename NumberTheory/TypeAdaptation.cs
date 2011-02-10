@@ -19,10 +19,20 @@ namespace NumberTheory
         {
             return BigInteger.DivRem(n1, n2, out rem);
         }
+
+        public static BigInteger Abs(BigInteger n)
+        {
+            return BigInteger.Abs(n);
+        }
 #else
         public static nt DivRem(nt n1, nt n2, out nt rem)
         {
             return Math.DivRem(n1, n2, out rem);
+        }
+
+        public static nt Abs(nt n)
+        {
+            return Math.Abs(n);
         }
 #endif
     }
