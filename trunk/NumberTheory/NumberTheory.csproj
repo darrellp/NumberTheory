@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="EuclideanAlgorithm.cs" />
     <Compile Include="EuclideanExt.cs" />
+    <Compile Include="PowerMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeAdaptation.cs" />
   </ItemGroup>
