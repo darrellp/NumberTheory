@@ -1,4 +1,5 @@
-﻿#if BIGINTEGER
+﻿using System.Linq;
+#if BIGINTEGER
 using System;
 using System.Numerics;
 using nt=System.Numerics.BigInteger;
@@ -29,6 +30,21 @@ namespace NumberTheoryLong
             }
             return val1;
 #endif
+        }
+
+        public static nt GCD(params nt[] vals)
+        {
+            return vals.Aggregate(GCD);
+        }
+
+        public static nt LCM(params nt[] vals)
+        {
+            return vals.Aggregate(LCM);
+        }
+
+        public static nt LCM(this nt val1, nt val2)
+        {
+            return val1*val2/GCD(val1, val2);
         }
 
         public static EuclideanExt EuclideanExt(this nt val1, nt val2)
@@ -70,6 +86,16 @@ namespace NumberTheoryLong
             cnst1 -= q * cf1;
             cnst2 -= q * cf2;
             return i => new[] { cf1 * i + cnst1, cf2 * i + cnst2 };
+        }
+
+        public static nt InverseMod(this nt n, nt mod)
+        {
+            var solns = LinearCongruenceSolve(n, 1, mod);
+            if (solns == null)
+            {
+                return -1;
+            }
+            return solns[0];
         }
 
         public static nt[] LinearCongruenceSolve(nt a, nt b, nt mod)

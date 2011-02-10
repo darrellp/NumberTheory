@@ -1,9 +1,4 @@
-﻿#if BIGINTEGER
-#elif LONG
-using nt = System.Int64;
-#endif
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if BIGINTEGER
 using euc = NumberTheoryBig.Euclidean;

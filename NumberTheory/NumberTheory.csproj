@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChineseRemainder.cs" />
     <Compile Include="EuclideanAlgorithm.cs" />
     <Compile Include="EuclideanExt.cs" />
     <Compile Include="PowerMod.cs" />
