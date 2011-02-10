@@ -1,6 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NumberTheory;
+#if BIGINTEGER
+using NumberTheoryBig;
+#else
+using NumberTheoryLong;
+#endif
 
 namespace NumberTheoryTests
 {

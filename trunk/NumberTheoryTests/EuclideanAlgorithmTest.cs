@@ -1,15 +1,16 @@
 ﻿#if BIGINTEGER
-using System;
-using System.Numerics;
-using nt = System.Numerics.BigInteger;
 #elif LONG
 using nt = System.Int64;
 #endif
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NumberTheory;
-using euc = NumberTheory.Euclidean;
+#if BIGINTEGER
+using euc = NumberTheoryBig.Euclidean;
+#else
+using NumberTheoryLong;
+using euc = NumberTheoryLong.Euclidean;
+#endif
 
 namespace NumberTheoryTests
 {
