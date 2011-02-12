@@ -91,10 +91,11 @@
   <ItemGroup>
     <Compile Include="ChineseRemainderTest.cs" />
     <Compile Include="EuclideanAlgorithmTest.cs" />
+    <Compile Include="FactoringTest.cs" />
     <Compile Include="PowerModTest.cs" />
     <Compile Include="PrimesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quadratic.cs" />
+    <Compile Include="QuadraticTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NumberTheory\NumberTheory.csproj">
