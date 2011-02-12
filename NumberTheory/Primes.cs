@@ -39,7 +39,7 @@ namespace NumberTheoryLong
                 return true;
             }
 
-            for (int i = 0; i < s; i++)
+            for (var i = 0; i < s; i++)
             {
                 if (bp == 1)
                 {
