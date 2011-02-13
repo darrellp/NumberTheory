@@ -2,7 +2,6 @@
 #if BIGINTEGER
 using nt=System.Numerics.BigInteger;
 #elif LONG
-using System;
 using nt = System.Int64;
 #endif
 
