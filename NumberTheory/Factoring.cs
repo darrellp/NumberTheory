@@ -23,9 +23,17 @@ namespace NumberTheoryLong
         private const int MaxGathers = 10;
 
         // ReSharper disable FunctionNeverReturns
-        static IEnumerable<nt> PollardSequence(nt n)
+        static IEnumerable<nt> PollardSequence(nt n, long seedLong)
         {
-            var seed = (nt)(Rnd.NextDouble() * Int64.MaxValue);
+            nt seed;
+            if (seedLong == -1)
+            {
+                seed = (nt)(Rnd.NextDouble() * Int64.MaxValue);
+            }
+            else
+            {
+                seed = seedLong;
+            }
             while (true)
             {
                 yield return seed;
@@ -33,9 +41,9 @@ namespace NumberTheoryLong
             }
         }
 
-        private static IEnumerable<nt> PollardDiffs(nt n)
+        private static IEnumerable<nt> PollardDiffs(nt n, long seed)
         {
-            var seq = PollardSequence(n);
+            var seq = PollardSequence(n, seed);
             var sLast = seq.First();
             seq = seq.Skip(1);
             var twoCount = 1;
@@ -54,9 +62,9 @@ namespace NumberTheoryLong
         }
         // ReSharper restore FunctionNeverReturns
 
-        public static nt PollardRho(nt n, int cIters = 10000)
+        public static nt PollardRho(nt n, long seed = -1, int cIters = 10000)
         {
-            var diffs = PollardDiffs(n);
+            var diffs = PollardDiffs(n, seed);
 
             for (var i = 0; i < cIters; i += MaxGathers)
             {
