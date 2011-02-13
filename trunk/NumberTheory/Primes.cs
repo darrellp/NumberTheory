@@ -48,7 +48,7 @@ namespace NumberTheoryLong
 
         public static bool CompositeByDivision(this nt n)
         {
-            return SmallPrimes.Where(p => n % p == 0).Any();
+            return SmallPrimes.Where(p => n != p && n % p == 0).Any();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
