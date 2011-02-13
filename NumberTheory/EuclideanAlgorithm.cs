@@ -37,8 +37,11 @@ namespace NumberTheoryLong
         public static nt GCD(this nt val1, nt val2)
         {
 #if BIGINTEGER
-            return BigInteger.GreatestCommonDivisor(val1, val2);
+            return BigInteger.GreatestCommonDivisor(BigInteger.Abs(val1), BigInteger.Abs(val2));
 #else
+            val1 = Math.Abs(val1);
+            val2 = Math.Abs(val2);
+
             while (val2 != 0)
             {
                 var r = val1 % val2;

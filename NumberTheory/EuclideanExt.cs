@@ -47,9 +47,19 @@ namespace NumberTheoryLong
 
         public nt Coeff2 { get; private set; }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Constructor based on the extended Euclidean Algorithm given in
+        /// Computation Number Theory by Wagon and Bressoud. </summary>
+        ///
+        /// <remarks>   Darrellp, 2/13/2011. </remarks>
+        ///
+        /// <param name="val1"> The first value. </param>
+        /// <param name="val2"> The second value. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         internal EuclideanExt(nt val1, nt val2)
         {
-            var rst = new[] { new[] { val1, 1, 0 }, new[] { val2, 0, 1 } };
+            var rst = new[] { new[] { TypeAdaptation.Abs(val1), 1, 0 }, new[] { TypeAdaptation.Abs(val2), 0, 1 } };
 
             while (rst[1][0] != 0)
             {
