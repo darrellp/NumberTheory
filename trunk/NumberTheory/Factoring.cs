@@ -17,13 +17,19 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Static class to hold functions related to factoring. </summary>
+    ///
+    /// <remarks>   Darrellp, 2/12/2011. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static class Factoring
     {
         static readonly Random Rnd = new Random();
         private const int MaxGathers = 10;
 
         // ReSharper disable FunctionNeverReturns
-        static IEnumerable<nt> PollardSequence(nt n, long seedLong)
+        private static IEnumerable<nt> PollardSequence(nt n, long seedLong)
         {
             nt seed;
             if (seedLong == -1)
@@ -61,6 +67,28 @@ namespace NumberTheoryLong
             }
         }
         // ReSharper restore FunctionNeverReturns
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Pollard Rho factoring. </summary>
+        ///
+        /// <remarks>   This follows the algorithm given in Computational Number Theory by Stan Wagon and
+        /// David Bressoud.  It utilizes the optimization suggested there by gathering MaxGathers values at
+        /// a time and doing the GCD on that product and n rather than performing a GCD at every step.  It
+        /// may fail in one of two ways - it might not find a factor in the given number of iterations, in which
+        /// case it returns -1 or it may happen that all the factors are present in the cycle of the rho, in
+        /// in which case it returns n.  The former happens most commonly on numbers too large and the latter on
+        /// numbers too small.  It's best to verify that n is not prime using a prime test before calling
+        /// this routine since it will just cycle the max number of iters on primes.
+        /// 
+        /// Darrellp, 2/12/2011.</remarks>
+        ///
+        /// <param name="n">        The value to be factored. </param>
+        /// <param name="seed">     The seed to be used for random number generation.  Defaults to using random seed. </param>
+        /// <param name="cIters">   The count of iterations before giving up. </param>
+        ///
+        /// <returns>   -1 if the algorithm failed to find a factor in cIters iterations.  n if the factors
+        /// couldn't be separated.  Any other value is a bonafide non-trivial factor. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static nt PollardRho(nt n, long seed = -1, int cIters = 10000)
         {

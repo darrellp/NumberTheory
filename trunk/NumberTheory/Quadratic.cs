@@ -11,8 +11,26 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Static class to handle Quadratic residues and related stuff. </summary>
+    ///
+    /// <remarks>   Darrellp, 2/12/2011. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     static public class Quadratic
     {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Returns the Jacobi symbol for the input values </summary>
+        ///
+        /// <remarks>   Uses the algorithm as given in Computational Number Theory by Wagon and Bressoud.
+        /// Darrellp, 2/12/2011. </remarks>
+        ///
+        /// <param name="a">    a of (a/n) </param>
+        /// <param name="n">    n of (a/n) </param>
+        ///
+        /// <returns>  The Jacobi symbol value of (a/n) </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         static public int Jacobi(nt a, nt n)
         {
             if ((n & 1) != 1)

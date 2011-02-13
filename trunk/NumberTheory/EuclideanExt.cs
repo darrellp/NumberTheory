@@ -11,10 +11,40 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Extended Euclidean algorithm. </summary>
+    ///
+    /// <remarks>   This is used to return the results from the extended Euclidean algorithm as given in
+    /// Computational Number Theory by Wagon and Bressoud.  See Euclidean.EuclideanExt for the function which
+    /// returns an object of this class.  I made a small attempt to try to keep the returned coefficients
+    /// relatively small.
+    /// Darrellp, 2/12/2011. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public class EuclideanExt
     {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the gcd after a call to Euclidean.EuclideanExt. </summary>
+        ///
+        /// <value> The gcd. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public nt GCD { get; private set; }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the coefficient for the first value in a call to Euclidean.EuclideanExt. </summary>
+        ///
+        /// <value> The coefficient. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public nt Coeff1 { get; private set; }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the coefficient for the second value in a call to Euclidean.EuclideanExt. </summary>
+        ///
+        /// <value> The coefficient. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public nt Coeff2 { get; private set; }
 
         internal EuclideanExt(nt val1, nt val2)
