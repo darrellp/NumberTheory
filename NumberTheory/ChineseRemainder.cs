@@ -1,7 +1,5 @@
 ﻿using System.Linq;
 #if BIGINTEGER
-using System;
-using System.Numerics;
 using nt=System.Numerics.BigInteger;
 #elif LONG
 using System;
