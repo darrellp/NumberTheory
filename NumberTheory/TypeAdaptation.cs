@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-#if BIGINTEGER
+﻿#if BIGINTEGER
 using System.Numerics;
-using nt=System.Numerics.BigInteger;
+
 #elif LONG
 using nt = System.Int64;
 #endif
@@ -16,25 +11,25 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
-    public static class TypeAdaptation
+    internal static class TypeAdaptation
     {
 #if BIGINTEGER
-        public static BigInteger DivRem(BigInteger n1, BigInteger n2, out BigInteger rem)
+        internal static BigInteger DivRem(BigInteger n1, BigInteger n2, out BigInteger rem)
         {
             return BigInteger.DivRem(n1, n2, out rem);
         }
 
-        public static BigInteger Abs(BigInteger n)
+        internal static BigInteger Abs(BigInteger n)
         {
             return BigInteger.Abs(n);
         }
 #else
-        public static nt DivRem(nt n1, nt n2, out nt rem)
+        internal static nt DivRem(nt n1, nt n2, out nt rem)
         {
             return Math.DivRem(n1, n2, out rem);
         }
 
-        public static nt Abs(nt n)
+        internal static nt Abs(nt n)
         {
             return Math.Abs(n);
         }

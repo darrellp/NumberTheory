@@ -15,8 +15,27 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Static class to hold functions related to the Chinese remainder. </summary>
+    ///
+    /// <remarks>   Darrellp, 2/12/2011. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static class ChineseRemainder
     {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Implements the Chinese Remainder Theorem.  This version of the algorithm
+        /// only works for pairwise coprime moduli. This algorithm solves for x a set of simultaneous
+        /// congruencies of the form x % mods[k] == a[k] where mods and a are parameters to the function.</summary>
+        ///
+        /// <remarks>   Darrellp, 2/12/2011. </remarks>
+        ///
+        /// <param name="aVals">    Array of values for the a[k] in the equation above. </param>
+        /// <param name="mods">     The mods in the equation above. </param>
+        ///
+        /// <returns>   A value which satisfies all the above congruencies. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public static nt CRT(nt[] aVals, nt[] mods)
         { 
             var mult = mods.Aggregate((acc, next) => acc * next);

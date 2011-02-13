@@ -11,8 +11,30 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   PowerMod code for the number theory library. </summary>
+    ///
+    /// <remarks>   Darrellp, 2/12/2011. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     static public class PowerMod
     {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Returns x^n Mod mod. </summary>
+        ///
+        /// <remarks>   The long version of this algorithm is modelled after the algorithm given in 
+        /// Computational Number Theory by Wagon and Bressoud.  The BigInteger version uses the CLR supplied
+        /// function to do this.  Unfortunately, it doesn't handle negative exponents so I have to manhandle
+        /// the return value if the exponent is negative.  This all happens transparently in the algorithm.
+        /// Darrellp, 2/12/2011. </remarks>
+        ///
+        /// <param name="x">    Value to be exponentiated. </param>
+        /// <param name="n">    The exponent. </param>
+        /// <param name="mod">  The modulus. </param>
+        ///
+        /// <returns>   x^n Mod mod </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         static public nt Power(nt x, nt n, nt mod)
         {
 #if BIGINTEGER
