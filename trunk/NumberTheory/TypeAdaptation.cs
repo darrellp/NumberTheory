@@ -1,7 +1,7 @@
 ﻿#if BIGINTEGER
 using System.Numerics;
-
 #elif LONG
+using System;
 using nt = System.Int64;
 #endif
 

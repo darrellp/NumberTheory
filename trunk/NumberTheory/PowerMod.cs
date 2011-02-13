@@ -50,12 +50,8 @@ namespace NumberTheoryLong
                 return 1;
             }
 
-            nt mask;
+            var mask = n.TopBitMask();
             nt res = 1;
-
-            for (mask = (~nt.MaxValue >> 1) & nt.MaxValue; (mask & n)== 0; mask >>= 1)
-            {
-            }
 
             while ((mask & n) == 0)
             {
