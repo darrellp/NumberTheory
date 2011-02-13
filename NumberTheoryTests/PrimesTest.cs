@@ -39,10 +39,16 @@ namespace NumberTheoryTests
         [TestMethod]
         public void CompositeByDivisionTest()
         {
+            // This value is actually composite but has prime factors above where we're testing.
             Assert.IsFalse(((nt)304679).CompositeByDivision());
+            // The rest of these should have prime factors within our range
             Assert.IsTrue(((nt)304680).CompositeByDivision());
             Assert.IsTrue(((nt)304681).CompositeByDivision());
             Assert.IsTrue(((nt)304682).CompositeByDivision());
+            
+            Assert.IsFalse(((nt)191).CompositeByDivision());
+            Assert.IsTrue(((nt)192).CompositeByDivision());
+            Assert.IsFalse(((nt)193).CompositeByDivision());
         }
 
         [TestMethod]
