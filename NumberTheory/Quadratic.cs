@@ -23,6 +23,11 @@ namespace NumberTheoryLong
         /// <summary>   Returns the Jacobi symbol for the input values </summary>
         ///
         /// <remarks>   Uses the algorithm as given in Computational Number Theory by Wagon and Bressoud.
+        /// This is the iterative, optimized solution.  I didn't use the table lookup because the arithmetic
+        /// is done in integers so it's not a big hit, it's easier to understand without the lookup and the
+        /// lookup incorporates taking -1 to the power so doesn't work with the pure arithmetic version
+        /// I use here.  I'm not sure why they don't just glom all the exponents together in the book.
+        /// Seems preferable and faster to me since they take two exponents when one is sufficient.
         /// Darrellp, 2/12/2011. </remarks>
         ///
         /// <param name="a">    a of (a/n) </param>
