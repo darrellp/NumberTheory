@@ -236,24 +236,27 @@ namespace NumberTheoryLong
 		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>   Implements the Lucas Psuedoprime test. </summary>
+		/// <summary>	Implements the Lucas Psuedoprime test. </summary>
 		///
-		/// <remarks>   I would like to implement the Mathematica PrimeQ test which is documented as "using
-		/// the Lucas psuedoprime test" in several places.  The trouble is, "Lucas psuedoprime test" is 
-		/// ambiguous since it relies on two values, p and q, which never seem to be specified in said
-		/// documentation.  It would appear from a chapter in "Mathematica in Action" by Wagon that in the
-		/// Mathematica version, q is 1 and p is chosen to the be smallest value such that p^2-4q is not a
-		/// square mod n and GCD(p,n) == 1. But in CNT, it explains that using q = +/-1 is a bad idea.  
-		/// It's all very confusing.  I'm going to use q = 2 and hope that this is as good or better than
+		/// <remarks>	
+		/// <para>I would like to implement the Mathematica PrimeQ test which is documented as "using the Lucas
+		/// psuedoprime test" in several places.  The trouble is, "Lucas psuedoprime test" is ambiguous
+		/// since it relies on two values, p and q, which never seem to be specified in said
+		/// documentation.  It would appear from a chapter in "Mathematica in Action" by Wagon that in
+		/// the Mathematica version, q is 1 and p is chosen to the be smallest value such that p^2-4q is
+		/// not a square mod n and GCD(p,n) == 1. But in CNT, it explains that using q = +/-1 is a bad
+		/// idea.</para>  
+		/// <para>It's all very confusing.  I'm going to use q = 2 and hope that this is as good or better than
 		/// the Mathematica PrimeQ, though it's clear as mud.  We want Jacobi(d,n) == -1 so that when we
-		/// use this in conjunction with the Euclidean psuedoprime tests we don't overlap effort.
+		/// use this in conjunction with the Euclidean psuedoprime tests we don't overlap effort.</para>
 		/// 
-		/// This is mostly taken from "Mathematica in Action" since I don't think it's described in CNT.
-		/// Darrellp, 2/13/2011. </remarks>
+		/// <para>This is mostly taken from "Mathematica in Action" since I don't think it's described in CNT.</para>
+		/// Darrellp, 2/13/2011. 
+		/// </remarks>
 		///
-		/// <param name="n">    The index of the term we're searching for (zero based). </param>
+		/// <param name="n">	The index of the term we're searching for (zero based). </param>
 		///
-		/// <returns>   true if the test passes, false if the test fails. </returns>
+		/// <returns>	true if the test passes, false if the test fails. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public static bool LucasPsuedoprimeTest(nt n)
