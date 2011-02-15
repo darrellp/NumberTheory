@@ -37,6 +37,18 @@ namespace NumberTheoryLong
             return ((n & 1) == 0) ? 1 : -1;
         }
 
+		internal static nt Normalize(this nt n, nt mod)
+		{
+			if (n < 0)
+			{
+				return n + ((mod -n - 1)/mod)*mod;
+			}
+			else if (n > mod)
+			{
+				return n - (n/mod)*mod;
+			}
+			return n;
+		}
         internal static nt TopBitMask(this nt n)
         {
             // ReSharper disable JoinDeclarationAndInitializer

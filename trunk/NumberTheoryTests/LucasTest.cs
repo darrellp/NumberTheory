@@ -33,6 +33,20 @@ namespace NumberTheoryTests
             Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1, -1, 520));
             Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1, -1, 525));
             Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1, -1, 527));
-        }
+
+			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 4181));
+			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 6721));
+			// These two psuedoprimes are caught by the quadratic test but
+			// missed by the test above.
+			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 323));
+			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 1891));
+
+			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 521));
+			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 523));
+			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 541));
+			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 520));
+			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 525));
+			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 527));
+		}
     }
 }
