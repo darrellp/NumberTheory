@@ -19,6 +19,7 @@ namespace NumberTheoryTests
             {
                 Assert.AreEqual(results[i - 1], Quadratic.Jacobi(10, i));
             }
+			Assert.AreEqual(1, Quadratic.Jacobi(-7, 100000007));
         }
     }
 }
