@@ -48,30 +48,20 @@ namespace NumberTheoryLong
 			{
 				nt ukNew;
 				nt ukp1New;
-				nt udblkp1 = ((ukp1*ukp1)%mod) - ((q*uk*uk)%mod);
+				var udblkp1 = (ukp1 * ukp1 - q * uk * uk).Normalize(mod);
 
-				// if the masked bit is 1
+				// Is the masked bit 1?
 				if ((n & mask) != 0)
 				{
 					// Calculate the 2k+1 and 2k+2 values of U
 					ukNew = udblkp1;
-					ukp1New = ((p * ukp1 * ukp1) % mod) - ((2 * q * uk * ukp1) % mod);
+					ukp1New = (ukp1 * (p * ukp1 - 2 * q * uk)).Normalize(mod);
 				}
-				// else if it is 0
 				else
 				{
 					// Calculate the 2k and 2k+1 values of U
-					ukNew = ((2 * uk * ukp1) % mod) - ((p * uk * uk) % mod);
+					ukNew = (uk * (2 * ukp1 - p * uk)).Normalize(mod);
 					ukp1New = udblkp1;
-				}
-
-				if (ukNew < 0)
-				{
-					ukNew += mod;
-				}
-				if (ukp1New < 0)
-				{
-					ukp1New += mod;
 				}
 
 				// Update u pair
@@ -148,27 +138,28 @@ namespace NumberTheoryLong
 		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>   Implements the Lucas Psuedoprime test. </summary>
+		/// <summary>	Implements the Lucas Psuedoprime test. </summary>
 		///
-		/// <remarks>   Taken from Computational Number theory by Wagon and Bressoud.  The implementation
-		/// in the book is a bit confusing since it suddenly introduces a test on GCD(n, 2qd) which isn't
-		/// mentioned anywhere else in the text as far as I can see.  It isn't in Corollary 8.2.  It is
-		/// explicitly mentioned in "Prime Numbers: A Computational Perspective" by Crandall and
-		/// Pomerance, but no proof of explanation seems to be given there for it's inclusion in the
-		/// theorem.  I try to follow CNT's lead in spite of the fact that I'm not sure I understand it.
-		/// Also, in CNT, they just resort to PrimeQ when n divides into 2qd.  I don't have the luxury
-		/// of resorting to PrimeQ in that case, so I just make it a condition that 2qd doesn't divide n
-		/// and throw an argument exception if it does.  Typically, q and d will be small and n will be
-		/// large so this is not a factor, but I'm trying to be complete here.
-		/// Darrellp, 2/13/2011. </remarks>
+		/// <remarks>	
+		/// Taken from Computational Number theory by Wagon and Bressoud.  The implementation in the book
+		/// is a bit confusing since it suddenly introduces a test on GCD(n, 2qd) which isn't mentioned
+		/// anywhere else in the text as far as I can see.  It isn't in Corollary 8.2.  It is explicitly
+		/// mentioned in "Prime Numbers: A Computational Perspective" by Crandall and Pomerance, but no
+		/// proof of explanation seems to be given there for it's inclusion in the theorem.  I try to
+		/// follow CNT's lead in spite of the fact that I'm not sure I understand it. Also, in CNT, they
+		/// just resort to PrimeQ when n divides into 2qd.  I don't have the luxury of resorting to
+		/// PrimeQ in that case, so I just make it a condition that 2qd doesn't divide n and throw an
+		/// argument exception if it does.  Typically, q and d will be small and n will be large so this
+		/// is not a factor, but I'm trying to be complete here. Darrellp, 2/13/2011. 
+		/// </remarks>
 		///
-		/// <exception cref="ArgumentException">    Thrown when n divides into 2q(p^2 - 4q)</exception>
+		/// <param name="p">	P value for Lucas Sequence. </param>
+		/// <param name="q">	Q value for Lucas Sequence. </param>
+		/// <param name="n">	The value to be tested for primality. </param>
 		///
-		/// <param name="p">    P value for Lucas Sequence. </param>
-		/// <param name="q">    Q value for Lucas Sequence. </param>
-		/// <param name="n">    The value to be tested for primality </param>
+		/// <returns>	true if n appears to be a prime, false if it's definitely composite. </returns>
 		///
-		/// <returns>   true if n appears to be a prime, false if it's definitely composite. </returns>
+		/// ### <exception cref="ArgumentException">	Thrown when n divides into 2q(p^2 - 4q) </exception>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public static bool LucasPsuedoprimeTest(int p, int q, nt n)
@@ -208,10 +199,12 @@ namespace NumberTheoryLong
 				return false;
 			}
 
+			// Retrieve the Lucas U and V values
 			var epsilon = Quadratic.Jacobi(d, n);
 			var tupLucas = LucasBoth(p, q, n, n - epsilon);
 
-			// Check the Lucas U and V values for n - (d/n)
+			//!+ TODO: Get rid of powermods below - epsilon is limited in it's values here.
+			// Check them for n - (d/n)
 			return tupLucas.Item1 == 0 && tupLucas.Item2 == (2 * PowerMod.Power(q, (1-epsilon)/2, n)).Normalize(n);
 		}
 
@@ -224,15 +217,12 @@ namespace NumberTheoryLong
 			// If the test conditions aren't met
 			if (n == g)
 			{
+				// Throw an ArgumentException
 				throw new ArgumentException("Invalid p, q, n in LucasPsuedoPrimeTest");
 			}
 
 			// If the test is trivially false
-			if (g > 1 && g < n)
-			{
-				return false;
-			}
-			return true;
+			return g <= 1 || g >= n;
 		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,6 +262,55 @@ namespace NumberTheoryLong
 			return tupLucas.Item1 == 0 && tupLucas.Item2 == 4;
 		}
 
-		//!+ TODO: Implement the MethodA tests as given in CNT
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Method A from Computational Number Theory by Wagon and Bressoud. </summary>
+		///
+		/// <remarks>	
+		/// I use the the trick in the text of starting d at -7 so that we avoid d = 5 which causes
+		/// slightly undesirable results.  Darrellp, 2/15/2011. 
+		/// </remarks>
+		///
+		/// <param name="n">	The value to be tested for primality. </param>
+		///
+		/// <returns>	true if it seems to be prime. </returns>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		public static bool IsPrimeMethodA(this nt n)
+		{
+			// Is n == 2?
+			if (n == 2)
+			{
+				// Special case it as a prime
+				return true;
+			}
+
+			// Is n even or a perfect square?
+			if ((n & 1) == 0 || n.IsPerfectSquare())
+			{
+				// If so, it isn't prime
+				return false;
+			}
+
+			// Set d to -7 to avoid problems with d==5
+			var d = -7;
+			int j;
+
+			// Search for a suitable d
+			while ((j = Quadratic.Jacobi(d, n)) == 1)
+			{
+				// Move to the next value of d in sequence
+				d = -d - 2*Math.Sign(d);
+			}
+			
+			// Did we find a suitable, non-trivial value for d?
+			if (j == -1)
+			{
+				// Use the Lucas test with the appropriate p, q
+				return LucasQuadraticTest(1, (1 - d)/4, n);
+			}
+
+			// n is small enough to use more trivial tests.
+			return n.GCD(d) < n ? false : !n.CompositeByDivision();
+		}
 	}
 }

@@ -44,7 +44,18 @@ namespace NumberTheoryLong
 			return ((n & 1) == 0) ? 1 : -1;
 		}
 
-		internal static nt Normalize(this nt n, nt mod)
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Normalizes a mod value to lie between 0 and mod-1. </summary>
+		///
+		/// <remarks>	Darrellp, 2/16/2011. </remarks>
+		///
+		/// <param name="n">	The value we're trying to normalize. </param>
+		/// <param name="mod">	The mod we're normalizing to. </param>
+		///
+		/// <returns>	a value congruent to n Mod mod lying between 0 and mod-1. </returns>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		public static nt Normalize(this nt n, nt mod)
 		{
 			if (n < 0)
 			{
@@ -103,7 +114,7 @@ namespace NumberTheoryLong
 		/// <returns>	true if n is a perfect square. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public static bool PerfectSquare(this nt n)
+		public static bool IsPerfectSquare(this nt n)
 		{
 			var sqrt = ISqrt(n);
 
