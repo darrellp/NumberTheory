@@ -23,7 +23,7 @@ namespace NumberTheoryLong
     public static class Primes
     {
         // First 200 small primes
-        private static readonly nt[] SmallPrimes =
+        internal static readonly nt[] SmallPrimes =
             new nt[]
             {
                 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61,
