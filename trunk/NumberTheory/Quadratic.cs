@@ -104,7 +104,7 @@ namespace NumberTheoryLong
 		/// <returns>	The square root if fSuccess is true, else indeterminate. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		static public nt SqrtMod(nt a, nt p, out bool fSuccess)
+		static public nt SqrtMod(this nt a, nt p, out bool fSuccess)
 		{
 			// If there's no square root
 			if (Jacobi(a, p) != 1)
