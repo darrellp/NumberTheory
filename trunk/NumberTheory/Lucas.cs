@@ -46,6 +46,7 @@ namespace NumberTheoryLong
 			// while the mask is non-zero
 			while (mask != 0)
 			{
+				// Locals
 				nt ukNew;
 				nt ukp1New;
 				var udblkp1 = (ukp1 * ukp1 - q * uk * uk).Normalize(mod);
