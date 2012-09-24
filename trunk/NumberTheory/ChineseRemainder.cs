@@ -32,7 +32,7 @@ namespace NumberTheoryLong
 		/// <param name="aVals">	Array of values for the a[k] in the equation above. </param>
 		/// <param name="mods">		The mods in the equation above. </param>
 		///
-		/// <returns>	A value which satisfies all the above congruencies. </returns>
+		/// <returns>	Value which satisfies all the above congruencies. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public static nt CRT(nt[] aVals, nt[] mods)
