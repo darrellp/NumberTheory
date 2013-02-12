@@ -16,6 +16,17 @@ namespace NumberTheoryTests
 	public class UtilitiesTest
 	{
 		[TestMethod]
+		public void TwosExponentTest()
+		{
+			nt m;
+			var n = Utilities.TwosExponent(4, out m);
+			Assert.AreEqual(1, m);
+			Assert.AreEqual(2,n);
+			n = Utilities.TwosExponent(12, out m);
+			Assert.AreEqual(3, m);
+			Assert.AreEqual(2,n);
+		}
+		[TestMethod]
 		public void BitCountTest()
 		{
 #if BIGINTEGER
@@ -26,6 +37,20 @@ namespace NumberTheoryTests
 			var n = (long)Math.Pow(2, 37);
 			Assert.AreEqual(38,n.BitCount());
 #endif
+		}
+
+		[TestMethod]
+		public void IRootTest()
+		{
+			for (int i = 1; i < 32; i++)
+			{
+				Assert.AreEqual(1, Utilities.IntegralRootOf(i, 5));
+			}
+			for (int i = 32; i < 242; i++)
+			{
+				Assert.AreEqual(2, Utilities.IntegralRootOf(i, 5));
+			}
+			Assert.AreEqual(3, Utilities.IntegralRootOf(243, 5));
 		}
 
 		[TestMethod]
