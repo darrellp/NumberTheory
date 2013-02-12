@@ -26,6 +26,8 @@ namespace NumberTheoryTests
 			#else
 			var n = Factoring.PollardRho(10505681, 1000);
 			Assert.IsTrue(n == 977 || n == 10753);
+			n = Factoring.PollardRho(20584996606709, 1000);
+			Assert.IsTrue(n == 1316717 || n == 15633577);
 			#endif
 		}
 	}

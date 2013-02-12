@@ -67,6 +67,10 @@ namespace NumberTheoryTests
 					Range(0, 1000).
 					Where(n => ((nt) (n + 100000000)).IsPrime()).ToArray();
 			Assert.IsTrue(poffsComputed.Length == poffs.Length && poffsComputed.Except(poffs).Count() == 0);
+
+			Assert.IsTrue(((nt)3).IsPrime());
+			Assert.IsTrue(((nt)2).IsPrime());
+			Assert.IsTrue(((nt)17).IsPrime());
 		}
 	}
 }
