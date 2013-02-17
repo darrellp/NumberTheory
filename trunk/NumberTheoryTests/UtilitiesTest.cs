@@ -18,6 +18,7 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void TwosExponentTest()
 		{
+#if NOTIN
 			nt m;
 			var n = Utilities.TwosExponent(4, out m);
 			Assert.AreEqual(1, m);
@@ -25,6 +26,7 @@ namespace NumberTheoryTests
 			n = Utilities.TwosExponent(12, out m);
 			Assert.AreEqual(3, m);
 			Assert.AreEqual(2,n);
+#endif
 		}
 		[TestMethod]
 		public void BitCountTest()
@@ -33,7 +35,7 @@ namespace NumberTheoryTests
 			var n = BigInteger.Pow(2, 73);
 			Assert.AreEqual(74,n.BitCount());
 #else
-			Assert.AreEqual(3, 4l.BitCount());
+			Assert.AreEqual(3, 4L.BitCount());
 			var n = (long)Math.Pow(2, 37);
 			Assert.AreEqual(38,n.BitCount());
 #endif
@@ -42,6 +44,7 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void IRootTest()
 		{
+#if NOTIN
 			for (int i = 1; i < 32; i++)
 			{
 				Assert.AreEqual(1, Utilities.IntegralRootOf(i, 5));
@@ -51,6 +54,7 @@ namespace NumberTheoryTests
 				Assert.AreEqual(2, Utilities.IntegralRootOf(i, 5));
 			}
 			Assert.AreEqual(3, Utilities.IntegralRootOf(243, 5));
+#endif
 		}
 
 		[TestMethod]
