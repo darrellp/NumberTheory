@@ -28,45 +28,67 @@ namespace NumberTheoryLong
 		static readonly Random Rnd = new Random();
 		private const int MaxGathers = 10;
 
-		// ReSharper disable FunctionNeverReturns
-		private static IEnumerable<nt> PollardSequence(nt n, long seedLong)
+		class PSeq
 		{
-			nt seed;
-			if (seedLong == -1)
-			{
-				seed = (nt)(Rnd.NextDouble() * Int64.MaxValue);
-			}
-			else
-			{
-				seed = seedLong;
-			}
-			while (true)
-			{
-				yield return seed;
-				seed = (seed*seed + 1) % n;
-			}
-		}
+			private nt X { get; set; }
+			private nt Y { get; set; }
 
-		private static IEnumerable<nt> PollardDiffs(nt n, long seed)
-		{
-			var seq = PollardSequence(n, seed);
-			var sLast = seq.First();
-			seq = seq.Skip(1);
-			var twoCount = 1;
-			while (true)
+			private nt Diff
 			{
-				var arSeq = seq.Skip(twoCount).Take(twoCount).ToArray();
-				seq = seq.Skip(2 * twoCount);
+				get { return TypeAdaptation.Abs(X - Y); }
+			}
+			private readonly nt _n;
 
-				foreach (var sCur in arSeq)
+			public PSeq(nt n)
+			{
+				X = (nt)(Rnd.NextDouble() * Int64.MaxValue);
+				Y = F(X);
+				_n = n;
+			}
+
+			public PSeq(nt n, long seed)
+			{
+				_n = n;
+				X = seed;
+				Y = F(X);
+			}
+
+			private void Advance()
+			{
+#if BIGINTEGER
+				X = F(X) % _n;
+				Y = F(F(Y)) % _n;
+#elif LONG
+				X = F(X);
+				Y = F(F(Y));
+#endif
+			}
+
+			nt F(nt x)
+			{
+#if BIGINTEGER
+				return x * x + 1;
+#elif LONG
+				// Possible overflow here keeps us from allowing numbers that won't fit
+				// in an Int32 for the Long version of Pollard-Rho.
+				return (x * x + 1) % _n;
+#endif
+			}
+
+			public List<nt> DiffsBlock
+			{
+				get
 				{
-					yield return TypeAdaptation.Abs(sLast - sCur);
+					var ret = new List<nt>();
+					for (var i = 0; i < MaxGathers; i++)
+					{
+						ret.Add(Diff);
+						Advance();
+					}
+					return ret;
 				}
-				sLast = arSeq[twoCount - 1];
-				twoCount *= 2;
 			}
 		}
-		// ReSharper restore FunctionNeverReturns
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Pollard Rho factoring. </summary>
@@ -98,14 +120,20 @@ namespace NumberTheoryLong
 
 		public static nt PollardRho(nt n, long seed = -1, int cIters = 10000)
 		{
+#if LONG
+			if (n > int.MaxValue)
+			{
+				throw new ArgumentException("n can't exceed int.MaxValue in long version of PollardRho - try BigInteger version");
+			}
+#endif
 			// Get the list of differences
-			var diffs = PollardDiffs(n, seed);
+			var pseq = seed == -1 ? new PSeq(n) : new PSeq(n, seed);
 
 			// For each block of differences
 			for (var i = 0; i < cIters; i += MaxGathers)
 			{
 				// Get the next block
-				var diffsBlock = diffs.Take(MaxGathers);
+				var diffsBlock = pseq.DiffsBlock;
 
 				// Get the GCD of n and the product of differences within the block
 				var fact = diffsBlock.Aggregate((a, v) => (a * v) % n).GCD(n);
@@ -116,7 +144,7 @@ namespace NumberTheoryLong
 				if (fact == n)
 				{
 					// Try doing GCD's on individual differences within the block
-					fact = diffsBlock.Select(d => n.GCD(d)).Where(d => d != 1).First();
+					fact = diffsBlock.Select(d => n.GCD(d)).First(d => d != 1);
 				}
 				
 				// If we've got a factor
@@ -125,9 +153,6 @@ namespace NumberTheoryLong
 					// return it
 					return fact;
 				}
-
-				// Move the enumerable past the just processed block of diffs
-				diffs = diffs.Skip(MaxGathers);
 			}
 
 			// Sadly, we never found a factor so return -1
