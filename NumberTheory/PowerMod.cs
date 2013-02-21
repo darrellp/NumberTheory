@@ -2,6 +2,7 @@
 using System.Numerics;
 using nt = System.Numerics.BigInteger;
 #elif LONG
+using System;
 using nt = System.Int64;
 #endif
 
@@ -45,7 +46,13 @@ namespace NumberTheoryLong
             }
             return nsol;
 #else
-            if (n == 0)
+#if LONG
+			if (n > int.MaxValue)
+			{
+				throw new ArgumentException("n can't exceed int.MaxValue in long version of Power - try BigInteger version");
+			}
+#endif
+			if (n == 0)
             {
                 return 1;
             }
