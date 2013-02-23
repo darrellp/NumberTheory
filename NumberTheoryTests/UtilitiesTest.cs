@@ -60,18 +60,19 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void ISqrtTest()
 		{
-			Assert.AreEqual(5, ((nt)31).ISqrt());
-			Assert.AreEqual(7, ((nt)63).ISqrt());
-			Assert.AreEqual(0, ((nt)0).ISqrt());
-			Assert.AreEqual(4, ((nt)16).ISqrt());
-			Assert.AreEqual(6, ((nt)36).ISqrt());
-			Assert.AreEqual(6, ((nt)37).ISqrt());
-			Assert.AreEqual(5, ((nt)35).ISqrt());
+			Assert.AreEqual(5, ((nt)31).IntegerSqrt());
+			Assert.AreEqual(7, ((nt)63).IntegerSqrt());
+			Assert.AreEqual(0, ((nt)0).IntegerSqrt());
+			Assert.AreEqual(4, ((nt)16).IntegerSqrt());
+			Assert.AreEqual(6, ((nt)36).IntegerSqrt());
+			Assert.AreEqual(6, ((nt)37).IntegerSqrt());
+			Assert.AreEqual(5, ((nt)35).IntegerSqrt());
 		}
 
 		[TestMethod]
 		public void TopBitMaskTest()
 		{
+			Assert.AreEqual((nt)0, ((nt)0).TopBitMask());
 #if BIGINTEGER
 			var n = BigInteger.Pow(2, 75) + BigInteger.Pow(2, 74) + 100;
 			Assert.AreEqual(BigInteger.Pow(2, 75), n.TopBitMask());

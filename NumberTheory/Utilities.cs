@@ -81,7 +81,7 @@ namespace NumberTheoryLong
 		/// <returns>	. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public static nt ISqrt(this nt n)
+		public static nt IntegerSqrt(this nt n)
 		{
 			// Take care of 0 and 1 trivially
 			if (n <= 1)
@@ -116,7 +116,7 @@ namespace NumberTheoryLong
 
 		public static bool IsPerfectSquare(this nt n)
 		{
-			var sqrt = ISqrt(n);
+			var sqrt = IntegerSqrt(n);
 
 			// Check that our integer square root is our real square root
 			return sqrt*sqrt == n;
@@ -157,7 +157,7 @@ namespace NumberTheoryLong
 			// Return the bits in the high byte plus all the bits in lower bytes
 			return cbitsHigh + 8 * (bytes.Length - 1);
 			#else
-			int cBits = 0;
+			var cBits = 0;
 
 			// Shift to count bits in the high order byte
 			for (; n != 0; n >>= 1, cBits++){}
@@ -182,33 +182,68 @@ namespace NumberTheoryLong
 
 		public static nt TopBitMask(this nt n)
 		{
-			// ReSharper disable JoinDeclarationAndInitializer
-			nt mask;
-			// ReSharper restore JoinDeclarationAndInitializer
-			#if BIGINTEGER
-			// Retrieve the raw bytes of n
-			var bytes = n.ToByteArray();
-
-			// Get the high order byte shifted right one bit
-			var bHigh = (byte)(bytes[bytes.Length - 1] >> 1);
-			byte bMask = 1;
-			var rgbMask = Enumerable.Repeat<byte>(0, bytes.Length).ToArray();
-			
-			// Shift mask to account for bits in the high order byte
-			for (; bHigh != 0; bHigh >>= 1, bMask <<= 1) { }
-			rgbMask[bytes.Length - 1] = bMask;
-
-			// Return the mask
-			mask = new BigInteger(rgbMask);
-			#else
-			if (n == 0)
-			{
-				return 0;
-			}
-			mask = (~nt.MaxValue >> 1) & nt.MaxValue;
-			for (; (mask & n) == 0; mask >>= 1) { }
-			#endif
-			return mask;
+			return n == 0 ? 0 : (nt)1 << (LeftmostOneIndex(n));
 		}
+
+		// lefmostOneIndex
+#pragma warning disable 1591
+		public static int LeftmostOneIndex(long l)
+		{
+			var shifted = (int)((ulong)l >> 32);
+			if (shifted != 0)
+			{
+				return 32 + LeftmostOneIndex(shifted);
+			}
+			return LeftmostOneIndex((int)l);
+		}
+
+		public static int LeftmostOneIndex(int i)
+		{
+			var shifted = (short)((ushort)i >> 16);
+			if (shifted != 0)
+			{
+				return 16 + LeftmostOneIndex(shifted);
+			}
+			return LeftmostOneIndex((short)i);
+		}
+
+		public static int LeftmostOneIndex(short i)
+		{
+			var shifted = (byte)(i >> 8);
+			if (shifted != 0)
+			{
+				return 8 + LeftmostOneIndex(shifted);
+			}
+			return LeftmostOneIndex((byte)i);
+		}
+
+		public static int LeftmostOneIndex(byte i)
+		{
+			if (i < 16)
+			{
+				return LeftmostOneIndexNybble(i);
+			}
+			return 4 + LeftmostOneIndexNybble((byte)(i >> 4));
+		}
+#pragma warning restore 1591
+
+		static readonly int[] NybbleVals = new[] { -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3 };
+
+		private static int LeftmostOneIndexNybble(byte nybble)
+		{
+			return NybbleVals[nybble];
+		}
+
+#if BIGINTEGER
+		public static int LeftmostOneIndex(BigInteger n)
+		{
+			if (n == BigInteger.Zero)
+			{
+				return -1;
+			}
+			byte[] rgb = n.ToByteArray();
+			return (rgb.Length - 1) * 8 + LeftmostOneIndex(rgb[rgb.Length - 1]);
+		}
+#endif
 	}
 }

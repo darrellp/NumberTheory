@@ -78,7 +78,7 @@ namespace NumberTheoryLong
 		private static IEnumerable<int[]> SieveCandidates(int[] primeList, nt n)
 		{
 			// Set sqrtN to the integer square root of n
-			var sqrtN = n.ISqrt() + 1;
+			var sqrtN = n.IntegerSqrt() + 1;
 
 			// Sieve our values out of primeList
 			return Enumerable.
