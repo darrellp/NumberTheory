@@ -61,7 +61,7 @@ namespace NumberTheoryLong
 			{
 				return n + ((mod -n - 1)/mod)*mod;
 			}
-			if (n > mod)
+			if (n >= mod)
 			{
 				return n - (n/mod)*mod;
 			}
