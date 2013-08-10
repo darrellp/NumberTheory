@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if BIGINTEGER
@@ -51,9 +52,32 @@ namespace NumberTheoryTests
 			Assert.IsFalse(((nt)193).CompositeByDivision());
 		}
 
+		private bool[] Seive(int n)
+		{
+			var ret = new bool[n + 1];
+			var sqrt = (int)Math.Sqrt(n) + 1;
+			ret[1] = true;
+
+			for (var i = 2; i <= sqrt; i++)
+			{
+				var cmp = 2 * i;
+				while (cmp < n)
+				{
+					ret[cmp] = true;
+					cmp += i;
+				}
+			}
+			return ret;
+		}
+
 		[TestMethod]
 		public void IsPrimeTest()
 		{
+			var sv = Seive(250000);
+			for (int i = 2; i < 250000; i++)
+			{
+				Assert.IsTrue(Primes.IsPrime(i) != sv[i]);
+			}
 			var poffs = new int[]
 				{
 					7, 37, 39, 49, 73, 81, 123, 127, 193, 213, 217, 223, 231, 237, 259,
@@ -71,7 +95,9 @@ namespace NumberTheoryTests
 			Assert.IsTrue(((nt)3).IsPrime());
 			Assert.IsTrue(((nt)2).IsPrime());
 			Assert.IsTrue(((nt)17).IsPrime());
+#if BIGINTEGER
 			Assert.IsTrue(((nt)20584996607207).IsPrime());
+#endif
 		}
 	}
 }
