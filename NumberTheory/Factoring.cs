@@ -148,7 +148,7 @@ namespace NumberTheoryLong
 				}
 				
 				// If we've got a factor
-				if (fact != 1)
+				if (fact != 1 & fact != n)
 				{
 					// return it
 					return fact;
