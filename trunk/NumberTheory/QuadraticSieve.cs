@@ -59,6 +59,7 @@ namespace NumberTheoryLong
 			var candidates = SieveCandidates(primeList, n);
 
 			// Find a set of rows that add to 0 mod 2
+			// TODO: Make this work
 
 			// Determine y from the solution found above
 			nt y = 0;
