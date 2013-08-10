@@ -199,7 +199,7 @@ namespace NumberTheoryLong
 
 		public static int LeftmostOneIndex(int i)
 		{
-			var shifted = (short)((ushort)i >> 16);
+			var shifted = (short)((uint)i >> 16);
 			if (shifted != 0)
 			{
 				return 16 + LeftmostOneIndex(shifted);
@@ -209,7 +209,7 @@ namespace NumberTheoryLong
 
 		public static int LeftmostOneIndex(short i)
 		{
-			var shifted = (byte)(i >> 8);
+			var shifted = (byte)((ushort)i >> 8);
 			if (shifted != 0)
 			{
 				return 8 + LeftmostOneIndex(shifted);
