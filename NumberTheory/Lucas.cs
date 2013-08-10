@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 #if BIGINTEGER
 using nt=System.Numerics.BigInteger;
 #elif LONG
@@ -183,30 +184,31 @@ namespace NumberTheoryLong
 		///
 		/// <remarks>	Darrellp, 2/15/2011. </remarks>
 		///
-		/// <param name="p">	P value for Lucas Sequence. </param>
-		/// <param name="q">	Q value for Lucas Sequence. </param>
 		/// <param name="n">	The index of the term we're searching for (zero based). </param>
 		///
 		/// <returns>	true if n displays prime behavior. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public static bool LucasQuadraticTest(int p, int q, nt n)
+		public static bool LucasPsuedoprimeTest(nt n)
 		{
-			int d;
+			if ((n & 1) == 0)
+			{
+				return n == 2;
+			}
+
+			int d, p, q;
 
 			// If trivially false
-			if (!LucasPrep(p, q, n, out d))
+			if (!GetLucasParameters(n, out p, out q, out d))
 			{
 				return false;
 			}
 
 			// Retrieve the Lucas U and V values
-			var epsilon = Quadratic.Jacobi(d, n);
-			var tupLucas = LucasBoth(p, q, n, n - epsilon);
+			var tupLucas = LucasBoth(p, q, n, n + 1);
 
-			//!+ TODO: Get rid of powermods below - epsilon is limited in it's values here.
 			// Check them for n - (d/n)
-			return tupLucas.Item1 == 0 && tupLucas.Item2 == (2 * PowerMod.Power(q, (1-epsilon)/2, n)).Normalize(n);
+			return tupLucas.Item1 == 0 && tupLucas.Item2 == (2 * (nt)q).Normalize(n);
 		}
 
 		private static bool LucasPrep(int p, int q, nt n, out int d)
@@ -226,92 +228,16 @@ namespace NumberTheoryLong
 			return g <= 1 || g >= n;
 		}
 
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Implements the Lucas Psuedoprime test. </summary>
-		///
-		/// <remarks>	
-		/// <para>I would like to implement the Mathematica PrimeQ test which is documented as "using the Lucas
-		/// psuedoprime test" in several places.  The trouble is, "Lucas psuedoprime test" is ambiguous
-		/// since it relies on two values, p and q, which never seem to be specified in said
-		/// documentation.  It would appear from a chapter in "Mathematica in Action" by Wagon that in
-		/// the Mathematica version, q is 1 and p is chosen to the be smallest value such that p^2-4q is
-		/// not a square mod n and GCD(p,n) == 1. But in CNT, it explains that using q = +/-1 is a bad
-		/// idea.</para>  
-		/// <para>It's all very confusing.  I'm going to use q = 2 and hope that this is as good or better than
-		/// the Mathematica PrimeQ, though it's clear as mud.  We want Jacobi(d,n) == -1 so that when we
-		/// use this in conjunction with the Euclidean psuedoprime tests we don't overlap effort.</para>
-		/// 
-		/// <para>This is mostly taken from "Mathematica in Action" since I don't think it's described in CNT.</para>
-		/// Darrellp, 2/13/2011. 
-		/// </remarks>
-		///
-		/// <param name="n">	The index of the term we're searching for (zero based). </param>
-		///
-		/// <returns>	true if the test passes, false if the test fails. </returns>
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		public static bool LucasPsuedoprimeTest(nt n)
+		static bool GetLucasParameters(nt n, out int p, out int q, out int d)
 		{
-			var p = 3;
-
-			// Find an appropriate parameter
-			for (; Quadratic.Jacobi(p * p - 8, n) == 1 || n.GCD(p) != 1; p++) { }
-
-			var tupLucas = LucasBoth(p, 2, n, n + 1);
-
-			// Use it in the Lucas primality test
-			return tupLucas.Item1 == 0 && tupLucas.Item2 == 4;
-		}
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Method A from Computational Number Theory by Wagon and Bressoud. </summary>
-		///
-		/// <remarks>	
-		/// I use the the trick in the text of starting d at -7 so that we avoid d = 5 which causes
-		/// slightly undesirable results.  Darrellp, 2/15/2011. 
-		/// </remarks>
-		///
-		/// <param name="n">	The value to be tested for primality. </param>
-		///
-		/// <returns>	true if it seems to be prime. </returns>
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		public static bool IsPrimeMethodA(this nt n)
-		{
-			// Is n == 2?
-			if (n == 2)
-			{
-				// Special case it as a prime
-				return true;
-			}
-
-			// Is n even or a perfect square?
-			if ((n & 1) == 0 || n.IsPerfectSquare())
-			{
-				// If so, it isn't prime
-				return false;
-			}
-
-			// Set d to -7 to avoid problems with d==5
-			var d = -7;
-			int j;
-
-			// Search for a suitable d
-			while ((j = Quadratic.Jacobi(d, n)) == 1)
-			{
-				// Move to the next value of d in sequence
-				d = -d - 2*Math.Sign(d);
-			}
-			
-			// Did we find a suitable, non-trivial value for d?
-			if (j == -1)
-			{
-				// Use the Lucas test with the appropriate p, q
-				return LucasQuadraticTest(1, (1 - d)/4, n);
-			}
-
-			// n is small enough to use more trivial tests.
-			return n.GCD(d) < n ? false : !n.CompositeByDivision();
+// ReSharper disable RedundantCast
+			d = Enumerable.Range(0, 1000)
+				.Select(i => ((i & 1) == 0 ? 5 + 2 * i : -5 - 2 * i))
+				.FirstOrDefault(i => Quadratic.Jacobi((nt)i, n) == -1);
+// ReSharper restore RedundantCast
+			p = 1;
+			q = (1 - d) / 4;
+			return d != 0;
 		}
 	}
 }
