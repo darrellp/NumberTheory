@@ -24,6 +24,7 @@ namespace NumberTheoryLong
     {
         // First 200 small primes
         internal static readonly nt[] SmallPrimes =
+// ReSharper disable RedundantArrayCreationExpression
             new nt[]
             {
                 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61,
@@ -34,6 +35,7 @@ namespace NumberTheoryLong
                 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461,
                 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541
             };
+// ReSharper restore RedundantArrayCreationExpression
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   Prime by division. </summary>
@@ -88,9 +90,9 @@ namespace NumberTheoryLong
             {
                 throw new ArgumentException("Negative value in StrongPsuedoPrimeTest");
             }
-            if ((n & 1) == 0)
+            if (n % b == 0)
             {
-                return n == 2;
+                return n == b;
             }
 
             nt nReduced;
