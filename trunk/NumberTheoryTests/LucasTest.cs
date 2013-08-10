@@ -41,32 +41,18 @@ namespace NumberTheoryTests
         [TestMethod]
         public void LucasPsuedoprimeTest()
         {
-			Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1,2,100000007));
+			Assert.IsTrue(Lucas.LucasPsuedoprimeTest(100000007));
 			
-			Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1, -1, 4181));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1, -1, 6721));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1, -1, 323));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1, -1, 1891));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1, -1, 521));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1, -1, 523));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(1, -1, 541));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1, -1, 520));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1, -1, 525));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1, -1, 527));
-
-			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 4181));
-			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 6721));
-			// These two psuedoprimes are caught by the quadratic test but
-			// missed by the test above.
-			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 323));
-			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 1891));
-
-			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 521));
-			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 523));
-			Assert.IsTrue(Lucas.LucasQuadraticTest(1, -1, 541));
-			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 520));
-			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 525));
-			Assert.IsFalse(Lucas.LucasQuadraticTest(1, -1, 527));
+			Assert.IsFalse(Lucas.LucasPsuedoprimeTest(4181));
+            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(6721));
+			Assert.IsFalse(Lucas.LucasPsuedoprimeTest(323));
+			Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1891));
+            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(521));
+            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(523));
+            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(541));
+            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(20));
+            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(525));
+            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(527));
 		}
     }
 }
