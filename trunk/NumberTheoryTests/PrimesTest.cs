@@ -71,6 +71,7 @@ namespace NumberTheoryTests
 			Assert.IsTrue(((nt)3).IsPrime());
 			Assert.IsTrue(((nt)2).IsPrime());
 			Assert.IsTrue(((nt)17).IsPrime());
+			Assert.IsTrue(((nt)20584996607207).IsPrime());
 		}
 	}
 }
