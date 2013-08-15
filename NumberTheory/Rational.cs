@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-#if BIGINTEGER
+﻿#if BIGINTEGER
 using nt = System.Numerics.BigInteger;
 #elif LONG
 using nt = System.Int64;
@@ -14,7 +10,7 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
-	class Rational
+	public class Rational
 	{
 		public nt Num { get; private set; }
 		public nt Den { get; private set; }
