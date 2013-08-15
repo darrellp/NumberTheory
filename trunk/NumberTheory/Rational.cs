@@ -1,4 +1,6 @@
-﻿#if BIGINTEGER
+﻿using System;
+using System.Runtime.CompilerServices;
+#if BIGINTEGER
 using nt = System.Numerics.BigInteger;
 #elif LONG
 using nt = System.Int64;
@@ -12,18 +14,58 @@ namespace NumberTheoryLong
 {
 	public class Rational
 	{
-		public nt Num { get; private set; }
-		public nt Den { get; private set; }
-		public bool AutoReduce { get; set; }
-
-		public Rational(nt num, nt den, bool autoReduce = true)
+		public nt Num
 		{
-			Num = num;
-			Den = den;
-			AutoReduce = autoReduce;
-			if (AutoReduce)
+			get { Reduce(); return _num; }
+			private set { _num = value; }
+		}
+
+		public nt Den
+		{
+			get { Reduce(); return _den; }
+			private set { _den = value; }
+		}
+
+		private bool _fReduced;
+		private nt _num;
+		private nt _den;
+
+		public Rational(nt num, nt den)
+		{
+			_num = num;
+			_den = num == 0 ? 1 : den;
+			_fReduced = false;
+			Reduce();
+		}
+
+		protected bool Equals(Rational other)
+		{
+			if (other == null)
+			{
+				return false;
+			}
+			Reduce();
+			other.Reduce();
+			return _num.Equals(other._num) && _den.Equals(other._den);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return !ReferenceEquals(null, obj) &&
+				(ReferenceEquals(this, obj) ||
+				 Equals(obj as Rational));
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
 			{
 				Reduce();
+				// ReSharper disable NonReadonlyFieldInGetHashCode
+				var hashCode = 397 ^ _num.GetHashCode();
+				hashCode = (hashCode * 397) ^ _den.GetHashCode();
+				// ReSharper restore NonReadonlyFieldInGetHashCode
+				return hashCode;
 			}
 		}
 
@@ -37,9 +79,9 @@ namespace NumberTheoryLong
 			return (Num + Den - 1) / Den;
 		}
 
-		public nt Frac()
+		public Rational Frac()
 		{
-			return (Num % Den) / Den;
+			return new Rational( Num % Den, Den);
 		}
 
 		public Rational Recip()
@@ -47,7 +89,14 @@ namespace NumberTheoryLong
 			return new Rational(Den, Num);
 		}
 
+#if BIGINTEGER
 		public static implicit operator Rational(nt i)
+		{
+			return new Rational(i, 1);
+		}
+#endif
+
+		public static implicit operator Rational(Int64 i)
 		{
 			return new Rational(i, 1);
 		}
@@ -72,8 +121,13 @@ namespace NumberTheoryLong
 			return new Rational(r1.Num * r2.Den, r1.Den * r2.Num);
 		}
 
-		private void Reduce()
+		public void Reduce()
 		{
+			if (_fReduced)
+			{
+				return;
+			}
+			_fReduced = true;
 			var gcd = Den.GCD(Num);
 			if (gcd != 1)
 			{
@@ -85,6 +139,20 @@ namespace NumberTheoryLong
 		public override string ToString()
 		{
 			return string.Format("{0}/{1}", Num, Den);
+		}
+
+		public static bool operator ==(Rational a, Rational b)
+		{
+			if ((object) a == null || (object) b == null)
+			{
+				return false;
+			}
+			return a.Den == b.Den && a.Num == b.Num;
+		}
+
+		public static bool operator !=(Rational a, Rational b)
+		{
+			return !(a == b);
 		}
 	}
 }
