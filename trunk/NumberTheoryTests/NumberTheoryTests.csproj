@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChineseRemainderTest.cs" />
+    <Compile Include="ContinuedFractionTest.cs" />
     <Compile Include="EuclideanAlgorithmTest.cs" />
     <Compile Include="FactoringTest.cs" />
     <Compile Include="LucasTest.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="PrimesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuadraticTest.cs" />
+    <Compile Include="RationalTest.cs" />
     <Compile Include="UtilitiesTest.cs" />
   </ItemGroup>
   <ItemGroup>
