@@ -47,7 +47,7 @@ namespace NumberTheoryLong
 			return new Rational(Den, Num);
 		}
 
-		public static implicit operator Rational(int i)
+		public static implicit operator Rational(nt i)
 		{
 			return new Rational(i, 1);
 		}
@@ -80,6 +80,11 @@ namespace NumberTheoryLong
 				Num /= gcd;
 				Den /= gcd;
 			}
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}/{1}", Num, Den);
 		}
 	}
 }
