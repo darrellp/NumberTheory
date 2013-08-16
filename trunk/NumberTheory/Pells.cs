@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 #if BIGINTEGER
 using nt=System.Numerics.BigInteger;
@@ -30,17 +31,23 @@ namespace NumberTheoryLong
 		/// <returns>false if there is no solution, else true</returns>
 		static public bool SolvePells(nt d, int rhs, out nt x, out nt y)
 		{
+			x = y = 0;
 			switch (rhs)
 			{
 				case 1:
 					nt p = 0;
 					nt q = 1;
-					var a = d.IntegerSqrt();
+					var ret = new List<nt> { d.IntegerSqrt() };
+
 					var firstTime = true;
 					while (firstTime || q != 1)
 					{
 						firstTime = false;
+						p = ret[ret.Count - 1] * q - p;
+						q = (d - p * p) / q;
+						ret.Add((p + ret[0]) / q);
 					}
+					Rational cnvVal = new ContinuedFraction(ret.Take(ret.Count - 1)).Val;
 					break;
 
 				default:

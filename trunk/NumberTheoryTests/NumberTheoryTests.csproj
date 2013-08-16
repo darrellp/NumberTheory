@@ -94,6 +94,7 @@
     <Compile Include="EuclideanAlgorithmTest.cs" />
     <Compile Include="FactoringTest.cs" />
     <Compile Include="LucasTest.cs" />
+    <Compile Include="PellsTest.cs" />
     <Compile Include="PowerModTest.cs" />
     <Compile Include="PrimesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
