@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if BIGINTEGER
 using NumberTheoryBig;

@@ -10,7 +10,7 @@ using System.Linq;
 using nt = System.Int64;
 #endif
 
-
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
 namespace NumberTheoryBig
 #elif LONG
