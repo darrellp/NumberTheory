@@ -8,12 +8,10 @@ using nt = System.Int64;
 
 // ReSharper disable CheckNamespace
 #if BIGINTEGER
-// ReSharper disable once CheckNamespace
 namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
-// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Represents a finite continued fraction
