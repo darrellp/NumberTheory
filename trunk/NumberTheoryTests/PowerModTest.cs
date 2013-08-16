@@ -3,8 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if BIGINTEGER
 using NumberTheoryBig;
+using nt = System.Numerics.BigInteger;
 #else
 using NumberTheoryLong;
+using nt = System.Int64;
 #endif
 
 namespace NumberTheoryTests
@@ -22,14 +24,7 @@ namespace NumberTheoryTests
 	    [TestMethod]
 	    public void MatrixPowerTest()
 	    {
-		    var mtx = new BigInteger[]
-		    {
-			    new BigInteger(18),
-				new BigInteger(5), 
-				new BigInteger(65), 
-				new BigInteger(18)
-		    };
-
+		    var mtx = new nt[] {18, 5, 65, 18};
 		    var res = PowerMod.MatrixPower(5, mtx);
 		    Assert.AreEqual(30349818, res[0]);
 			Assert.AreEqual(8417525, res[1]);
