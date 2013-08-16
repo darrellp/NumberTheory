@@ -31,30 +31,55 @@ namespace NumberTheoryLong
 		/// <returns>false if there is no solution, else true</returns>
 		static public bool SolvePells(nt d, int rhs, out nt x, out nt y)
 		{
+			return SolvePells(d, rhs, 1, out x, out y);
+		}
+
+		static public bool SolvePells(nt d, int rhs, nt k, out nt x, out nt y)
+		{
 			x = y = 0;
+			List<nt> cnfRepeat;
+			var mtx = PellMatrix(d, out cnfRepeat);
+
 			switch (rhs)
 			{
 				case 1:
-					nt p = 0;
-					nt q = 1;
-					var ret = new List<nt> { d.IntegerSqrt() };
+					var kt = ((cnfRepeat.Count & 1) != 0) ? k : 2 * k;
+					var mtxp = PowerMod.MatrixPower(kt, mtx);
+					x = mtxp[0];
+					y = mtxp[1];
+					return true;
 
-					var firstTime = true;
-					while (firstTime || q != 1)
+				case -1:
+					if ((cnfRepeat.Count & 1) != 0)
 					{
-						firstTime = false;
-						p = ret[ret.Count - 1] * q - p;
-						q = (d - p * p) / q;
-						ret.Add((p + ret[0]) / q);
+						return false;
 					}
-					Rational cnvVal = new ContinuedFraction(ret.Take(ret.Count - 1)).Val;
-					break;
+					var mtxn = PowerMod.MatrixPower(2 * k - 1, mtx);
+					x = mtxn[0];
+					y = mtxn[1];
+					return true;
 
 				default:
-					throw new NotImplementedException();
+					return false;
 			}
-			x = y = -1;
-			return false;
+		}
+
+		static public nt[] PellMatrix(nt d, out List<nt> cnfRepeat)
+		{
+			nt p = 0;
+			nt q = 1;
+			cnfRepeat = new List<nt> { d.IntegerSqrt() };
+
+			var firstTime = true;
+			while (firstTime || q != 1)
+			{
+				firstTime = false;
+				p = cnfRepeat[cnfRepeat.Count - 1] * q - p;
+				q = (d - p * p) / q;
+				cnfRepeat.Add((p + cnfRepeat[0]) / q);
+			}
+			Rational cnvVal = new ContinuedFraction(cnfRepeat.Take(cnfRepeat.Count - 1)).Val;
+			return new nt[] {cnvVal.Num, cnvVal.Den, d * cnvVal.Den, cnvVal.Num};
 		}
 	}
 }
