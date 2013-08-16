@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 #if BIGINTEGER
 using nt = System.Numerics.BigInteger;
 #elif LONG
@@ -47,6 +48,13 @@ namespace NumberTheoryLong
 		}
 
 		public ContinuedFraction(Rational r) : this(r.Num, r.Den){}
+
+		public ContinuedFraction(IEnumerable<nt> vals)
+		{
+			Vals = vals.ToList();
+			var cnv = Convergents();
+			Val = cnv[cnv.Count - 1];
+		}
 
 		public List<Rational> Convergents()
 		{

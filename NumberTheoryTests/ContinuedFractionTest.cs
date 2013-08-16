@@ -26,6 +26,9 @@ namespace NumberTheoryTests
 		    Assert.AreEqual(4, cfr.Vals.Count);
 		    var retval = new nt[] {2, 2, 1, 4};
 		    Assert.IsTrue(cfr.Vals.Zip(retval, (a, b) => a == b).All(f => f));
+
+			cfr = new ContinuedFraction(retval);
+			Assert.AreEqual(cfr.Val, new Rational(33, 14));
 	    }
 
 	    [TestMethod]
