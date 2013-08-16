@@ -5,6 +5,7 @@ using nt = System.Numerics.BigInteger;
 using nt = System.Int64;
 #endif
 
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
 namespace NumberTheoryBig
 #elif LONG

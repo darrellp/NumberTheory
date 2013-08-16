@@ -6,21 +6,28 @@ using nt = System.Numerics.BigInteger;
 using nt = System.Int64;
 #endif
 
-
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
-
 // ReSharper disable once CheckNamespace
 namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
-	/// Represents a continued fraction
+	/// Represents a finite continued fraction
 	/// </summary>
 	public class ContinuedFraction
 	{
+		/// <summary>
+		/// The value represented by this continued fraction
+		/// </summary>
 		public Rational Val { get; private set; }
+		/// <summary>
+		/// The values in the continued fraction notation, sometimes called
+		/// partial quotients.
+		/// </summary>
 		public List<nt> Vals {get; private set;}
 
 		/// <summary>
@@ -47,8 +54,16 @@ namespace NumberTheoryLong
 			}
 		}
 
+		/// <summary>
+		/// Contructor which takes a rational
+		/// </summary>
+		/// <param name="r">Rational this CF is to represent</param>
 		public ContinuedFraction(Rational r) : this(r.Num, r.Den){}
 
+		/// <summary>
+		/// Constructor from the partial quotients
+		/// </summary>
+		/// <param name="vals">The partial quotients</param>
 		public ContinuedFraction(IEnumerable<nt> vals)
 		{
 			Vals = vals.ToList();
@@ -56,11 +71,15 @@ namespace NumberTheoryLong
 			Val = cnv[cnv.Count - 1];
 		}
 
+		/// <summary>
+		/// The convergents of the CF
+		/// </summary>
+		/// <returns>A list of the convergents</returns>
 		public List<Rational> Convergents()
 		{
 			if (Vals.Count == 1)
 			{
-				return new List<Rational> {(Rational)Vals[0]};
+				return new List<Rational> {Vals[0]};
 			}
 			var ret = new List<Rational>();
 			var pm2 = Vals[0];

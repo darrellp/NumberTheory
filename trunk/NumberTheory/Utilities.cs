@@ -1,5 +1,4 @@
 ﻿#if BIGINTEGER
-using System.Linq;
 using System.Numerics;
 using nt = System.Numerics.BigInteger;
 #elif LONG
@@ -7,7 +6,7 @@ using System;
 using nt = System.Int64;
 #endif
 
-
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
 namespace NumberTheoryBig
 #elif LONG
@@ -227,7 +226,7 @@ namespace NumberTheoryLong
 		}
 #pragma warning restore 1591
 
-		static readonly int[] NybbleVals = new[] { -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3 };
+		static readonly int[] NybbleVals = { -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3 };
 
 		private static int LeftmostOneIndexNybble(byte nybble)
 		{

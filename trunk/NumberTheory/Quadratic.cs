@@ -1,12 +1,10 @@
 ﻿#if BIGINTEGER
-using NumberTheoryBig;
 using nt = System.Numerics.BigInteger;
 #else
-using NumberTheoryLong;
 using nt = System.Int64;
 #endif
 
-
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
 namespace NumberTheoryBig
 #elif LONG

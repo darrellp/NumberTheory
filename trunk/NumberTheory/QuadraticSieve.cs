@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
 using nt = System.Numerics.BigInteger;
-using System.Numerics;
 #elif LONG
 using nt = System.Int64;
 #endif
