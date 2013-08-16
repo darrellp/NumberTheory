@@ -57,6 +57,8 @@ namespace NumberTheoryLong
                 return 1;
             }
 
+	        bool fNeg = n < 0;
+	        n = Math.Abs(n);
             var mask = n.TopBitMask();
             nt res = 1;
 
@@ -74,6 +76,10 @@ namespace NumberTheoryLong
                 res = res%mod;
                 mask >>= 1;
             }
+	        if (fNeg)
+	        {
+				res = res.InverseMod(mod);
+	        }
             return res;
 #endif
         }
@@ -88,6 +94,14 @@ namespace NumberTheoryLong
 		    return mRet;
 	    }
 
+	    /// <summary>
+	    /// Takes a power of a matrix using the same splitting technique
+	    /// that PowerMod uses.
+	    /// </summary>
+	    /// <param name="n">The power to be taken</param>
+	    /// <param name="matrix">The matrix as an array.  First two elements
+	    /// is the first row and the last two are the second row.</param>
+	    /// <returns>matrix^n in the same format as the input matrix</returns>
 	    static public nt[] MatrixPower(nt n, nt[] matrix)
 	    {
 			if (n == 0)
