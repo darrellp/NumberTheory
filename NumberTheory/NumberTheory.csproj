@@ -88,6 +88,7 @@
     <Compile Include="ContinuedFraction.cs" />
     <Compile Include="EuclideanAlgorithm.cs" />
     <Compile Include="EuclideanExt.cs" />
+    <Compile Include="EulerPhi.cs" />
     <Compile Include="Factoring.cs" />
     <Compile Include="Lucas.cs" />
     <Compile Include="Pells.cs" />

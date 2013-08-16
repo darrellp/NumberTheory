@@ -17,6 +17,18 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
+	public class PrimeFactor
+	{
+		public nt Prime { get; private set; }
+		public nt Exp { get; private set; }
+
+		public PrimeFactor(nt prime, nt exp)
+		{
+			Prime = prime;
+			Exp = exp;
+		}
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>   Static class to hold functions related to factoring. </summary>
 	///
@@ -157,6 +169,82 @@ namespace NumberTheoryLong
 
 			// Sadly, we never found a factor so return -1
 			return -1;
+		}
+
+		private static void IncDict(nt val, Dictionary<nt, int> dict)
+		{
+			if (dict.ContainsKey(val))
+			{
+				dict[val]++;
+			}
+			else
+			{
+				dict[val] = 1;
+			}
+		}
+
+		public static List<PrimeFactor> Factor(nt n)
+		{
+			var ret = new List<PrimeFactor>();
+
+			if (n == 1 || n.IsPrime())
+			{
+				ret.Add(new PrimeFactor(n, 1));
+				return ret;
+			}
+
+			foreach (var prime in Primes.SmallPrimes)
+			{
+				var exp = 0;
+				while (n % prime == 0)
+				{
+					exp++;
+					n /= prime;
+				}
+				if (exp == 0)
+				{
+					continue;
+				}
+				ret.Add(new PrimeFactor(prime, exp));
+				if (n == 1)
+				{
+					return ret;
+				}
+			}
+
+			var factors = new Dictionary<nt, int>();
+			var trialFactors = new Stack<nt>();
+			trialFactors.Push(n);
+			while (true)
+			{
+				if (trialFactors.Count == 0)
+				{
+					break;
+				}
+				n = trialFactors.Pop();
+				if (n.IsPrime())
+				{
+					IncDict(n, factors);
+					continue;
+				}
+
+				var factor = PollardRho(n);
+
+				if (factor == n || factor == -1)
+				{
+					throw new ArgumentException(string.Format("Unable to factor {0}", n));
+				}
+
+				trialFactors.Push(factor);
+				trialFactors.Push(n / factor);
+			}
+
+			foreach (var primeExp in factors)
+			{
+				ret.Add(new PrimeFactor(primeExp.Key, primeExp.Value));
+			}
+
+			return ret;
 		}
 	}
 }

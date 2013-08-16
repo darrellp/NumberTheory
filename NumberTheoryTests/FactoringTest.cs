@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if BIGINTEGER
 using NumberTheoryBig;
@@ -17,7 +19,9 @@ namespace NumberTheoryTests
 		public void PollardRhoTest()
 		{
 			#if BIGINTEGER
-			var n = Factoring.PollardRho(20584996606709, 1000);
+			var n = Factoring.PollardRho(49);
+			Assert.AreEqual(7,n);
+			n = Factoring.PollardRho(20584996606709, 1000);
 			Assert.IsTrue(n == 1316717 || n == 15633577);
 			n = Factoring.PollardRho(30871180313527, 1000);
 			Assert.IsTrue(n == 5555611 || n == 5556757);
@@ -26,9 +30,39 @@ namespace NumberTheoryTests
 			n = Factoring.PollardRho(113, 1000);
 			Assert.IsTrue(n == -1);
 			#else
+			var n = Factoring.PollardRho(49);
+			Assert.AreEqual(7,n);
 			var n = Factoring.PollardRho(10505681, 1000);
 			Assert.IsTrue(n == 977 || n == 10753);
 			#endif
+		}
+
+		bool FindFactor(nt prime, int exp, List<PrimeFactor> factorization)
+		{
+			return factorization.Any(primeFactor => primeFactor.Prime == prime && primeFactor.Exp == exp);
+		}
+
+		bool ValidateFactors(List<PrimeFactor> factorization, params nt[] factors )
+		{
+			if (factorization.Count != factors.Length / 2)
+			{
+				return false;
+			}
+			for (int i = 0; i < factors.Length / 2; i++)
+			{
+				if (!FindFactor(factors[2 * i], (int)factors[2 * i + 1], factorization))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		[TestMethod]
+		public void DoFactoringTest()
+		{
+			Assert.IsTrue(ValidateFactors(Factoring.Factor(10), 5, 1, 2, 1));
+			Assert.IsTrue(ValidateFactors(Factoring.Factor(297049858030), 2357,2,5347,1,5,1,2,1));
 		}
 	}
 }
