@@ -77,5 +77,41 @@ namespace NumberTheoryLong
             return res;
 #endif
         }
+
+	    static private nt[] MatrixMultiply(nt[] m1, nt[] m2)
+	    {
+		    var mRet = new nt[4];
+			mRet[0] = m1[0] * m2[0] + m1[1] * m2[2];
+		    mRet[1] = m1[0] * m2[1] + m1[1] * m2[3];
+		    mRet[2] = m1[2] * m2[0] + m1[3] * m2[2];
+		    mRet[3] = m1[2] * m2[1] + m1[3] * m2[3];
+		    return mRet;
+	    }
+
+	    static public nt[] MatrixPower(nt n, nt[] matrix)
+	    {
+			if (n == 0)
+			{
+				return new nt[] {1, 0, 0, 1};
+			}
+
+			var mask = n.TopBitMask();
+			var res = new nt[] { 1, 0, 0, 1 };
+
+			while ((mask & n) == 0)
+			{
+				mask >>= 1;
+			}
+			while (mask != 0)
+			{
+				res = MatrixMultiply(res, res);
+				if ((mask & n) != 0)
+				{
+					res = MatrixMultiply(res, matrix);
+				}
+				mask >>= 1;
+			}
+			return res;
+		}
     }
 }
