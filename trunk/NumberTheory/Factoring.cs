@@ -1,12 +1,9 @@
-﻿#if BIGINTEGER
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if BIGINTEGER
 using nt=System.Numerics.BigInteger;
 #elif LONG
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using nt = System.Int64;
 #endif
 
@@ -17,11 +14,26 @@ namespace NumberTheoryBig
 namespace NumberTheoryLong
 #endif
 {
+	/// <summary>
+	/// Represents a prime power in a factorization
+	/// </summary>
 	public class PrimeFactor
 	{
+		/// <summary>
+		/// The prime in this factor
+		/// </summary>
 		public nt Prime { get; private set; }
+
+		/// <summary>
+		/// Exponent for the prime
+		/// </summary>
 		public nt Exp { get; private set; }
 
+		/// <summary>
+		/// Create a prime factor for a factorization
+		/// </summary>
+		/// <param name="prime">The prime factor</param>
+		/// <param name="exp">It's exponent</param>
 		public PrimeFactor(nt prime, nt exp)
 		{
 			Prime = prime;
@@ -37,7 +49,7 @@ namespace NumberTheoryLong
 
 	public static class Factoring
 	{
-		static readonly Random Rnd = new Random();
+		static Random _rnd = new Random();
 		private const int MaxGathers = 10;
 
 		class PSeq
@@ -49,19 +61,23 @@ namespace NumberTheoryLong
 			{
 				get { return TypeAdaptation.Abs(X - Y); }
 			}
-			private readonly nt _n;
+			private nt _n;
 
 			public PSeq(nt n)
 			{
-				X = (nt)(Rnd.NextDouble() * Int64.MaxValue);
-				Y = F(X);
-				_n = n;
+				Init(n);
 			}
 
 			public PSeq(nt n, long seed)
 			{
+				_rnd = new Random((int)seed);
+				Init(n);
+			}
+
+			private void Init(long n)
+			{
 				_n = n;
-				X = seed;
+				X = (nt) (_rnd.NextDouble() * Int64.MaxValue);
 				Y = F(X);
 			}
 
@@ -87,18 +103,15 @@ namespace NumberTheoryLong
 #endif
 			}
 
-			public List<nt> DiffsBlock
+			public List<nt> DiffsBlock()
 			{
-				get
+				var ret = new List<nt>(MaxGathers);
+				for (var i = 0; i < MaxGathers; i++)
 				{
-					var ret = new List<nt>();
-					for (var i = 0; i < MaxGathers; i++)
-					{
-						ret.Add(Diff);
-						Advance();
-					}
-					return ret;
+					ret.Add(Diff);
+					Advance();
 				}
+				return ret;
 			}
 		}
 
@@ -145,7 +158,7 @@ namespace NumberTheoryLong
 			for (var i = 0; i < cIters; i += MaxGathers)
 			{
 				// Get the next block
-				var diffsBlock = pseq.DiffsBlock;
+				var diffsBlock = pseq.DiffsBlock();
 
 				// Get the GCD of n and the product of differences within the block
 				var fact = diffsBlock.Aggregate((a, v) => (a * v) % n).GCD(n);
@@ -158,7 +171,13 @@ namespace NumberTheoryLong
 					// Try doing GCD's on individual differences within the block
 					fact = diffsBlock.Select(d => n.GCD(d)).First(d => d != 1);
 				}
-				
+
+				if (fact == n)
+				{
+					// If we still couldn't manage, try with a different seed
+					return PollardRho(n, seed == -1 ? -1 : seed + 1, cIters);
+				}
+
 				// If we've got a factor
 				if (fact != 1 & fact != n)
 				{
@@ -183,7 +202,15 @@ namespace NumberTheoryLong
 			}
 		}
 
-		public static List<PrimeFactor> Factor(nt n)
+		/// <summary>
+		/// Do a full factorization for a number
+		/// </summary>
+		/// <param name="n">Number to be factored</param>
+		/// <param name="seed">Seed to use for Pollard Rho factoring algorithm</param>
+		/// <param name="cIters">Iterations to use in Pollard Rho</param>
+		/// <returns>A list of prime factors</returns>
+		/// <exception cref="ArgumentException">Thrown if we can't factor a value during the algorithm</exception>
+		public static List<PrimeFactor> Factor(nt n, long seed = -1, int cIters = 10000)
 		{
 			var ret = new List<PrimeFactor>();
 
@@ -228,7 +255,7 @@ namespace NumberTheoryLong
 					continue;
 				}
 
-				var factor = PollardRho(n);
+				var factor = PollardRho(n, seed, cIters);
 
 				if (factor == n || factor == -1)
 				{
@@ -239,10 +266,7 @@ namespace NumberTheoryLong
 				trialFactors.Push(n / factor);
 			}
 
-			foreach (var primeExp in factors)
-			{
-				ret.Add(new PrimeFactor(primeExp.Key, primeExp.Value));
-			}
+			ret.AddRange(factors.Select(primeExp => new PrimeFactor(primeExp.Key, primeExp.Value)));
 
 			return ret;
 		}
