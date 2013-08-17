@@ -32,7 +32,7 @@ namespace NumberTheoryTests
 			#else
 			var n = Factoring.PollardRho(49);
 			Assert.AreEqual(7,n);
-			var n = Factoring.PollardRho(10505681, 1000);
+			n = Factoring.PollardRho(10505681, 1000);
 			Assert.IsTrue(n == 977 || n == 10753);
 			#endif
 		}
@@ -61,8 +61,12 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void DoFactoringTest()
 		{
+			Assert.IsTrue(ValidateFactors(Factoring.Factor(381151), 563, 1, 677, 1));
 			Assert.IsTrue(ValidateFactors(Factoring.Factor(10), 5, 1, 2, 1));
+			Assert.IsTrue(ValidateFactors(Factoring.Factor(345119), 563,1,613,1));
+#if BIGINTEGER
 			Assert.IsTrue(ValidateFactors(Factoring.Factor(297049858030), 2357,2,5347,1,5,1,2,1));
+#endif
 		}
 	}
 }
