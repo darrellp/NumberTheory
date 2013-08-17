@@ -74,7 +74,7 @@ namespace NumberTheoryLong
 				Init(n);
 			}
 
-			private void Init(long n)
+			private void Init(nt n)
 			{
 				_n = n;
 				X = (nt) (_rnd.NextDouble() * Int64.MaxValue);
@@ -188,6 +188,11 @@ namespace NumberTheoryLong
 
 			// Sadly, we never found a factor so return -1
 			return -1;
+		}
+
+		public static nt PollardRhoSafe(nt n, long seed = -1, int cIters = 10000)
+		{
+			return n.IsPrime() ? n : PollardRho(n, seed, cIters);
 		}
 
 		private static void IncDict(nt val, Dictionary<nt, int> dict)
