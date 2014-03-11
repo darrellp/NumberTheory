@@ -190,6 +190,27 @@ namespace NumberTheoryLong
 			return -1;
 		}
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Pollard Rho safe factoring. </summary>
+		///
+		/// <remarks>	
+		/// Same as Pollard Rho but checks if n is prime before applying Pollard Rho which isn't happy
+		/// when it gets primes passed into it.
+		/// 
+		/// Darrellp, 3/11/2014. 
+		/// </remarks>
+		///
+		/// <param name="n">		The value to be factored. </param>
+		/// <param name="seed">		The seed to be used for random number generation.  Defaults to using
+		/// 						random seed. </param>
+		/// <param name="cIters">	The count of iterations before giving up. </param>
+		///
+		/// <returns>	
+		/// -1 if the algorithm failed to find a factor in cIters iterations.  n if the factors couldn't
+		/// be separated.  Any other value is a bonafide non-trivial factor. 
+		/// </returns>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		public static nt PollardRhoSafe(nt n, long seed = -1, int cIters = 10000)
 		{
 			return n.IsPrime() ? n : PollardRho(n, seed, cIters);

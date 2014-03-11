@@ -35,6 +35,7 @@ namespace NumberTheoryLong
 		/// <returns>	Value which satisfies all the above congruencies. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		// ReSharper disable once ParameterTypeCanBeEnumerable.Global
 		public static nt CRT(nt[] aVals, nt[] mods)
 		{ 
 			// Ensure that the moduli are pairwise relatively prime
