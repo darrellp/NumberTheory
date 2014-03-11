@@ -140,6 +140,11 @@ namespace NumberTheoryLong
 		}
 
 #if BIGINTEGER
+		/// <summary>
+		/// Returns a rational representing an integer
+		/// </summary>
+		/// <param name="i">Integer to be represented</param>
+		/// <returns>Rational representing i</returns>
 		public static implicit operator Rational(nt i)
 		{
 			return new Rational(i, 1);

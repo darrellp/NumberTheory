@@ -234,13 +234,18 @@ namespace NumberTheoryLong
 		}
 
 #if BIGINTEGER
+		/// <summary>
+		/// Get the index of the leftmost 1 bit in n
+		/// </summary>
+		/// <param name="n">Value whose leftmost 1 bit will be found</param>
+		/// <returns>Index of the leftmost 1 bit in n</returns>
 		public static int LeftmostOneIndex(BigInteger n)
 		{
 			if (n == BigInteger.Zero)
 			{
 				return -1;
 			}
-			byte[] rgb = n.ToByteArray();
+			var rgb = n.ToByteArray();
 			return (rgb.Length - 1) * 8 + LeftmostOneIndex(rgb[rgb.Length - 1]);
 		}
 #endif
