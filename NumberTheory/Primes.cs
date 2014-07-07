@@ -13,6 +13,7 @@ namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// <summary>   Static class for functions dealing with prime numbers. </summary>

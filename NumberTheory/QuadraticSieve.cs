@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-// ReSharper disable CheckNamespace
 #if BIGINTEGER
 using nt = System.Numerics.BigInteger;
 #elif LONG
@@ -9,11 +8,13 @@ using nt = System.Int64;
 #endif
 
 
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
 namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Class to hold the static routine implementing the quadratic sieve. </summary>

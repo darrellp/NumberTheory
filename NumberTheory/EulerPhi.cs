@@ -10,6 +10,7 @@ namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Class to determine Euler's Phi function

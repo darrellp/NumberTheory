@@ -12,6 +12,7 @@ namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Solve Pell's equation through continued fractions

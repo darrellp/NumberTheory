@@ -10,6 +10,7 @@ namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>   Static class to handle Quadratic residues and related stuff. </summary>

@@ -2,7 +2,6 @@
 using System.Numerics;
 using nt = System.Numerics.BigInteger;
 #elif LONG
-using System;
 using nt = System.Int64;
 #endif
 
@@ -12,6 +11,7 @@ namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Utilities for the Number Theory routines. </summary>
