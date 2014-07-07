@@ -11,6 +11,7 @@ namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
     internal static class TypeAdaptation
     {

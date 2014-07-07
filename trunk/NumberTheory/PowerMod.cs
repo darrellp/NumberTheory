@@ -12,6 +12,7 @@ namespace NumberTheoryBig
 #elif LONG
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// <summary>   PowerMod code for the number theory library. </summary>

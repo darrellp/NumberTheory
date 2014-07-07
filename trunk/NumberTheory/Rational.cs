@@ -5,13 +5,13 @@ using nt = System.Numerics.BigInteger;
 using nt = System.Int64;
 #endif
 
+// ReSharper disable CheckNamespace
 #if BIGINTEGER
-// ReSharper disable once CheckNamespace
 namespace NumberTheoryBig
 #elif LONG
-// ReSharper disable once CheckNamespace
 namespace NumberTheoryLong
 #endif
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Represents a rational number
