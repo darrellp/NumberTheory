@@ -36,15 +36,21 @@ namespace NumberTheoryLong
 
 		public static nt Factor(nt n)
 		{
-			// Verify that n is not a power
-			nt fctPower = CheckPower(n);
-
-			// If it is
-			if (fctPower > 0)
+			if ((n & 1) == 0)
 			{
-				// Return it's root
-				return fctPower;
+				return 2;
 			}
+
+			//// Verify that n is not a power
+			//var fctPower = CheckPower(n);
+
+			//// If it is
+			//if (fctPower > 0)
+			//{
+			//	// Return it's root
+			//	return fctPower;
+			//}
+			//return 0;
 
 			// Determine B for B-smooth number base
 			var b = DetermineB(n);
@@ -54,7 +60,7 @@ namespace NumberTheoryLong
 
 			// for each prime found, find the square root of n mod that prime
 			bool fSuccess;
-			var sqrtList = primeList.Select(p => ((nt)p).SqrtMod(n, out fSuccess)).ToList();
+			var sqrtList = primeList.Select(p => ((nt) p).SqrtMod(n, out fSuccess)).ToList();
 
 			// Compute our Candidate list
 			var candidates = SieveCandidates(primeList, n);
@@ -72,10 +78,29 @@ namespace NumberTheoryLong
 			return n.GCD(x - y);
 		}
 
-		private static nt CheckPower(nt n)
-		{
-			throw new NotImplementedException();
-		}
+		//private static long CheckPower(nt n)
+		//{
+		//	return Enumerable.Range(3, n.BitCount()).Select(k => CheckSinglePower(n, k)).FirstOrDefault(k => k >= 0);
+		//}
+
+		//private static nt CheckSinglePower(nt n, nt k)
+		//{
+		//	if (n < 4)
+		//	{
+		//		return -1;
+		//	}
+		//	var xCur = n;
+		//	nt xPrev = xCur / 2;
+
+		//	while (xPrev != xCur && xPrev != xCur + 1)
+		//	{
+		//		var t = xCur;
+		//		var pow = PowerMod.Power(xPrev, k - 1);
+		//		xCur = (n + (k - 1) * xPrev * pow) / (k * pow);
+		//		xPrev = t;
+		//	}
+		//	return xPrev == xCur && PowerMod.Power(xCur, k) == n ? xCur : -1;
+		//}
 
 		private static IEnumerable<int[]> SieveCandidates(int[] primeList, nt n)
 		{
@@ -85,18 +110,18 @@ namespace NumberTheoryLong
 			// Sieve our values out of primeList
 			return Enumerable.
 				// Get an "infinite" range of values
-				Range(0,int.MaxValue).
+				Range(0, int.MaxValue).
 				// Offset them by the square root of n
 				Select(indx => sqrtN + indx).
 				// Factor them over our factor base
-				Select(cand => CheckBSmooth(cand*cand - n, primeList)).
+				Select(cand => CheckBSmooth(cand * cand - n, primeList)).
 				// Toss the ones that aren't  B-smooth
 				Where(lst => lst != null).
 				// Only keep K of the rest
 				Take(primeList.Length);
 		}
 
-		private static int CountFactors( ref nt cand, int p)
+		private static int CountFactors(ref nt cand, int p)
 		{
 			var nCount = 0;
 			while (cand % p == 0)
@@ -130,21 +155,22 @@ namespace NumberTheoryLong
 				// Filter out the non-residues and return the rest of the primes smaller than B
 				return sp.
 					Take(Array.BinarySearch(sp, b)).
-					Where(cand=>Quadratic.Jacobi(n, cand) == 1).
-					Select(bi => (int)bi).
+					Where(cand => Quadratic.Jacobi(n, cand) == 1).
+					Select(bi => (int) bi).
 					ToArray();
 			}
 			//!+TODO: Implement case where we need more primes!!!
 			throw new NotImplementedException();
 		}
 
+		static private readonly double BExp = Math.Sqrt(2) / 4;
+
 		private static int DetermineB(nt n)
 		{
-			// Probably too large - at least according to Pomerance
 #if BIGINTEGER
-			return (int) Math.Exp(Math.Sqrt(nt.Log(n)*Math.Log(nt.Log(n))));
+			return (int) Math.Pow(Math.Exp(Math.Sqrt(nt.Log(n)*Math.Log(nt.Log(n)))), BExp);
 #else
-			return (int)Math.Exp(Math.Sqrt(Math.Log(n) * Math.Log(Math.Log(n))));
+			return (int) Math.Pow(Math.Exp(Math.Sqrt(Math.Log(n) * Math.Log(Math.Log(n)))), BExp);
 #endif
 		}
 	}
