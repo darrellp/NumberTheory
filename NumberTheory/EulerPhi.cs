@@ -32,13 +32,12 @@ namespace NumberTheoryLong
 			}
 
 			var factorization = Factoring.Factor(n, seed, cIters);
-			nt ret = 1;
+			nt ret = n;
 
-			// ReSharper disable once LoopCanBeConvertedToQuery
 			foreach (var primeFactor in factorization)
 			{
-				// We're save doing it mod n here since phi is always less than n
-				ret *= PowerMod.Power(primeFactor.Prime, primeFactor.Exp - 1, n) * (primeFactor.Prime - 1);
+				ret /= primeFactor.Prime;
+				ret *= primeFactor.Prime - 1;
 			}
 			return ret;
 		}
