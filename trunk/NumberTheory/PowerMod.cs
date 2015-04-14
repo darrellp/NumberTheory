@@ -38,7 +38,7 @@ namespace NumberTheoryLong
         /// <returns>   x^n Mod mod </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static public nt Power(nt x, nt n, nt mod = -1)
+        static public nt Power(nt x, nt n, nt mod)
         {
 #if BIGINTEGER
             var nsol = BigInteger.ModPow(x, BigInteger.Abs(n), mod);
