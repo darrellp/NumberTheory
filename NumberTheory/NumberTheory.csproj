@@ -9,29 +9,11 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NumberTheory</RootNamespace>
-    <AssemblyName>NumberTheory</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;BIGINTEGER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\NumberTheory.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BigIntegerDbg|AnyCPU'">
+    <AssemblyName>NumberTheoryBig</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\BigIntegerDbg\</OutputPath>
     <DefineConstants>TRACE;DEBUG;BIGINTEGER</DefineConstants>
@@ -42,6 +24,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BigIntegerRls|AnyCPU'">
+    <AssemblyName>NumberTheoryBig</AssemblyName>
     <OutputPath>bin\BigIntegerRls\</OutputPath>
     <DefineConstants>TRACE;BIGINTEGER</DefineConstants>
     <Optimize>true</Optimize>
@@ -52,6 +35,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LongDbg|AnyCPU'">
+    <AssemblyName>NumberTheoryLong</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\LongDbg\</OutputPath>
     <DefineConstants>TRACE;DEBUG;LONG</DefineConstants>
@@ -61,9 +45,10 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
-    <DocumentationFile>bin\LongDbg\NumberTheory.XML</DocumentationFile>
+    <DocumentationFile>bin\LongDbg\NumberTheory.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LongRls|AnyCPU'">
+    <AssemblyName>NumberTheoryLong</AssemblyName>
     <OutputPath>bin\LongRls\</OutputPath>
     <DefineConstants>TRACE;LONG</DefineConstants>
     <Optimize>true</Optimize>
@@ -86,6 +71,7 @@
   <ItemGroup>
     <Compile Include="ChineseRemainder.cs" />
     <Compile Include="ContinuedFraction.cs" />
+    <Compile Include="Eratosthenes.cs" />
     <Compile Include="EuclideanAlgorithm.cs" />
     <Compile Include="EuclideanExt.cs" />
     <Compile Include="EulerPhi.cs" />
