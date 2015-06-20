@@ -77,7 +77,7 @@ namespace NumberTheoryLong
 		///
 		/// <param name="n">	The value we're investigating. </param>
 		///
-		/// <returns>	. </returns>
+		/// <returns>	Floor(Sqrt(n)) </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public static nt IntegerSqrt(this nt n)
@@ -100,6 +100,45 @@ namespace NumberTheoryLong
 			}
 
 			// Return the outcome
+			return x;
+		}
+
+
+		private static nt NewtonRootStep(nt k, nt n, nt x)
+		{
+			return (((k - 1) * PowerMod.Power(x, k) + n) / (k * PowerMod.Power(x, (k - 1))));
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		///  <summary>	
+		///  Integer Root using Newton's method. 
+		///  </summary>
+		/// 
+		///  <remarks>	Darrellp, 2/15/2011. </remarks>
+		/// <param name="n">	The value we're investigating. </param>
+		/// <param name="k">	Order of the root. </param>
+		/// <returns>	Floor(KthRoot(n, k)) </returns>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		public static long IntegerRoot(long n, long k)
+		{
+			var bc = n.BitCount();		// An approximation of Log2(n)
+			var x = (nt)1;
+			// The following approximately calculates the first term of the maclaurin series as the starting point
+			for (var ik = 0; ik < k; ik++)
+			{
+				x *= bc;
+				x /= k*(ik + 1);
+			}
+			if (x <= 0)
+			{
+				x = 1;
+			}
+			var y = NewtonRootStep(k, n, x);
+			do
+			{
+				x = y;
+				y = NewtonRootStep(k, n, x);
+			} while (y < x);
 			return x;
 		}
 

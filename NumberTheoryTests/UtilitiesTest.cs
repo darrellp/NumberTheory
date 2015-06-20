@@ -44,17 +44,23 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void IRootTest()
 		{
-#if NOTIN
-			for (int i = 1; i < 32; i++)
+			int[] testCases = {3, 7, 233, 70, 256, 47};
+
+			for (var k = 2; k < 5; k++)
 			{
-				Assert.AreEqual(1, Utilities.IntegralRootOf(i, 5));
+				foreach (var n in testCases)
+				{
+					RootTest(n, k);
+				}
 			}
-			for (int i = 32; i < 242; i++)
-			{
-				Assert.AreEqual(2, Utilities.IntegralRootOf(i, 5));
-			}
-			Assert.AreEqual(3, Utilities.IntegralRootOf(243, 5));
-#endif
+		}
+
+		private void RootTest(int n, int k)
+		{
+			var power = PowerMod.Power(n, k);
+			Assert.AreEqual(n, Utilities.IntegerRoot(power,k));
+			Assert.AreEqual(n, Utilities.IntegerRoot(power + 1, k));
+			Assert.AreEqual(n - 1, Utilities.IntegerRoot(power - 1, k));
 		}
 
 		[TestMethod]
