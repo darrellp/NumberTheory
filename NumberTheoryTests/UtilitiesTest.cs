@@ -53,11 +53,12 @@ namespace NumberTheoryTests
 					RootTest(n, k);
 				}
 			}
+			Assert.AreEqual(10, Utilities.IntegerRoot(11111111,7));
 		}
 
 		private void RootTest(int n, int k)
 		{
-			var power = PowerMod.Power(n, k);
+			nt power = PowerMod.Power(n, k);
 			Assert.AreEqual(n, Utilities.IntegerRoot(power,k));
 			Assert.AreEqual(n, Utilities.IntegerRoot(power + 1, k));
 			Assert.AreEqual(n - 1, Utilities.IntegerRoot(power - 1, k));

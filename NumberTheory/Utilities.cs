@@ -2,6 +2,7 @@
 using System.Numerics;
 using nt = System.Numerics.BigInteger;
 #elif LONG
+using System;
 using nt = System.Int64;
 #endif
 
@@ -88,7 +89,7 @@ namespace NumberTheoryLong
 				return n;
 			}
 
-			// Make a guess to initialize Newton's method
+			// Make a guess to initialize
 			var x = (nt)1 << ((n.BitCount() + 1)/2);
 			nt y;
 
@@ -119,8 +120,9 @@ namespace NumberTheoryLong
 		/// <param name="k">	Order of the root. </param>
 		/// <returns>	Floor(KthRoot(n, k)) </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-		public static long IntegerRoot(long n, long k)
+		public static nt IntegerRoot(nt n, nt k)
 		{
+#if BIGINTEGER
 			var bc = n.BitCount();		// An approximation of Log2(n)
 			var x = (nt)1;
 			// The following approximately calculates the first term of the maclaurin series as the starting point
@@ -140,6 +142,18 @@ namespace NumberTheoryLong
 				y = NewtonRootStep(k, n, x);
 			} while (y < x);
 			return x;
+#else
+			var ret = (nt)((Math.Exp(Math.Log((double) n)/k)));
+			if (PowerMod.Power(ret, k) <= n)
+			{
+				ret += PowerMod.Power((ret + 1), k) > n ? 0 : 1;
+			}
+			else
+			{
+				ret--;
+			}
+			return ret;
+#endif
 		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////

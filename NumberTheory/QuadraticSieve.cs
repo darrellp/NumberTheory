@@ -82,12 +82,12 @@ namespace NumberTheoryLong
 			return n.GCD(x - y);
 		}
 
-		private static long CheckPower(nt n)
+		private static nt CheckPower(nt n)
 		{
 			return Enumerable.Range(3, n.BitCount()).Select(k => CheckSinglePower(n, k)).FirstOrDefault(k => k >= 0);
 		}
 
-		private static nt CheckSinglePower(nt n, nt k)
+		private static nt CheckSinglePower(nt n, int k)
 		{
 			if (n < 4)
 			{
