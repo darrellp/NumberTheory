@@ -1,4 +1,5 @@
 ﻿#if BIGINTEGER
+using System;
 using System.Numerics;
 using nt = System.Numerics.BigInteger;
 #elif LONG
@@ -23,22 +24,27 @@ namespace NumberTheoryLong
     static public class PowerMod
     {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>   Returns x^n Mod mod. </summary>
-        ///
-        /// <remarks>   The long version of this algorithm is modelled after the algorithm given in 
-        /// Computational Number Theory by Wagon and Bressoud.  The BigInteger version uses the CLR supplied
-        /// function to do this.  Unfortunately, it doesn't handle negative exponents so I have to manhandle
-        /// the return value if the exponent is negative.  This all happens transparently in the algorithm.
-        /// Darrellp, 2/12/2011. </remarks>
-        ///
-        /// <param name="x">    Value to be exponentiated. </param>
-        /// <param name="n">    The exponent. </param>
-        /// <param name="mod">  The modulus. </param>
-        ///
-        /// <returns>   x^n Mod mod </returns>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
+	    /// <summary>   Returns x^n Mod mod. </summary>
+	    ///
+	    /// <remarks>   The long version of this algorithm is modelled after the algorithm given in 
+	    /// Computational Number Theory by Wagon and Bressoud.  The BigInteger version uses the CLR supplied
+	    /// function to do this.  Unfortunately, it doesn't handle negative exponents so I have to manhandle
+	    /// the return value if the exponent is negative.  This all happens transparently in the algorithm.
+	    /// Darrellp, 2/12/2011. </remarks>
+	    ///
+	    /// <param name="x">    Value to be exponentiated. </param>
+	    /// <param name="n">    The exponent. </param>
+	    /// <param name="mod">  The modulus. </param>
+	    ///
+	    /// <returns>   x^n Mod mod </returns>
+	    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static public nt Power(nt x, nt n, nt mod = -1)
+	    static public nt Power(nt x, nt n)
+	    {
+		    return Power(x, n, (nt) (-1));
+	    }
+
+        static public nt Power(nt x, nt n, nt mod)
         {
 	        bool fMod = mod >= 2;
 	        if (!fMod && n < 0)
@@ -68,8 +74,12 @@ namespace NumberTheoryLong
                 return 1;
             }
 
-	        bool fNeg = n < 0;
-	        n = Math.Abs(n);
+		    var fNeg = false;
+		    if (n < 0)
+		    {
+			    fNeg = true;
+			    n = -n;
+		    }
             var mask = n.TopBitMask();
             nt res = 1;
 
