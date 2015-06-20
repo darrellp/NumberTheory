@@ -104,12 +104,12 @@ namespace NumberTheoryLong
 			return x;
 		}
 
-
+#if BIGINTEGER
 		private static nt NewtonRootStep(nt k, nt n, nt x)
 		{
 			return (((k - 1) * PowerMod.Power(x, k) + n) / (k * PowerMod.Power(x, (k - 1))));
 		}
-
+#endif
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		///  <summary>	
 		///  Integer Root using Newton's method. 
@@ -143,7 +143,7 @@ namespace NumberTheoryLong
 			} while (y < x);
 			return x;
 #else
-			var ret = (nt)((Math.Exp(Math.Log((double) n)/k)));
+			var ret = (nt)((Math.Exp(Math.Log(n)/k)));
 			if (PowerMod.Power(ret, k) <= n)
 			{
 				ret += PowerMod.Power((ret + 1), k) > n ? 0 : 1;
