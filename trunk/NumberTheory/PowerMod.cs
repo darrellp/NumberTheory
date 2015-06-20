@@ -38,21 +38,30 @@ namespace NumberTheoryLong
         /// <returns>   x^n Mod mod </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static public nt Power(nt x, nt n, nt mod)
+        static public nt Power(nt x, nt n, nt mod = -1)
         {
+	        bool fMod = mod >= 2;
+	        if (!fMod && n < 0)
+	        {
+		        throw new ArgumentException("Trying to take negative exponent without a modulus");
+	        }
 #if BIGINTEGER
-            var nsol = BigInteger.ModPow(x, BigInteger.Abs(n), mod);
-            if (n < 0)
-            {
-                nsol = nsol.InverseMod(mod);
-            }
-            return nsol;
+			if (fMod)
+			{
+				var nsol = BigInteger.ModPow(x, BigInteger.Abs(n), mod);
+				if (n < 0)
+				{
+					nsol = nsol.InverseMod(mod);
+				}
+				return nsol;
+			}
 #else
 #if LONG
 			if (n > int.MaxValue)
 			{
 				throw new ArgumentException("n can't exceed int.MaxValue in long version of Power - try BigInteger version");
 			}
+#endif
 #endif
 			if (n == 0)
             {
@@ -77,7 +86,7 @@ namespace NumberTheoryLong
                 }
 	            if (mod > 0)
 	            {
-					res = res%mod;
+					res = res % mod;
 	            }
                 mask >>= 1;
             }
@@ -86,7 +95,6 @@ namespace NumberTheoryLong
 				res = res.InverseMod(mod);
 	        }
             return res;
-#endif
         }
 
 	    static private nt[] MatrixMultiply(nt[] m1, nt[] m2)

@@ -41,16 +41,20 @@ namespace NumberTheoryLong
 				return 2;
 			}
 
-			//// Verify that n is not a power
-			//var fctPower = CheckPower(n);
+			if (n.IsPrime())
+			{
+				return n;
+			}
 
-			//// If it is
-			//if (fctPower > 0)
-			//{
-			//	// Return it's root
-			//	return fctPower;
-			//}
-			//return 0;
+			// Verify that n is not a power
+			var fctPower = CheckPower(n);
+
+			// If it is
+			if (fctPower > 0)
+			{
+				// Return it's root
+				return fctPower;
+			}
 
 			// Determine B for B-smooth number base
 			var b = DetermineB(n);
@@ -78,29 +82,20 @@ namespace NumberTheoryLong
 			return n.GCD(x - y);
 		}
 
-		//private static long CheckPower(nt n)
-		//{
-		//	return Enumerable.Range(3, n.BitCount()).Select(k => CheckSinglePower(n, k)).FirstOrDefault(k => k >= 0);
-		//}
+		private static long CheckPower(nt n)
+		{
+			return Enumerable.Range(3, n.BitCount()).Select(k => CheckSinglePower(n, k)).FirstOrDefault(k => k >= 0);
+		}
 
-		//private static nt CheckSinglePower(nt n, nt k)
-		//{
-		//	if (n < 4)
-		//	{
-		//		return -1;
-		//	}
-		//	var xCur = n;
-		//	nt xPrev = xCur / 2;
-
-		//	while (xPrev != xCur && xPrev != xCur + 1)
-		//	{
-		//		var t = xCur;
-		//		var pow = PowerMod.Power(xPrev, k - 1);
-		//		xCur = (n + (k - 1) * xPrev * pow) / (k * pow);
-		//		xPrev = t;
-		//	}
-		//	return xPrev == xCur && PowerMod.Power(xCur, k) == n ? xCur : -1;
-		//}
+		private static nt CheckSinglePower(nt n, nt k)
+		{
+			if (n < 4)
+			{
+				return -1;
+			}
+			var kRoot = Utilities.IntegerRoot(n, k);
+			return PowerMod.Power(kRoot, k) == n ? kRoot : -1;
+		}
 
 		private static IEnumerable<int[]> SieveCandidates(int[] primeList, nt n)
 		{
