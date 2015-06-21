@@ -27,8 +27,8 @@ namespace NumberTheoryTests
 			Assert.IsTrue(n == 5555611 || n == 5556757);
 			n = Factoring.PollardRho(111, 1000);
 			Assert.IsTrue(n == 3 || n == 37);
-			n = Factoring.PollardRho(113, 1000);
-			Assert.IsTrue(n == -1);
+			n = Factoring.PollardRhoSafe(113, 1000);
+			Assert.IsTrue(n == 113);
 			#else
 			var n = Factoring.PollardRho(49);
 			Assert.AreEqual(7,n);
