@@ -69,7 +69,7 @@ static public class Quadratic
 	/// <param name="p">		The prime we're doing this modulo. </param>
 	/// <param name="fSuccess">	[out] False if there is no square root. </param>
 	/// <returns>	The square root if fSuccess is true, else indeterminate. </returns>
-	static public T SqrtMod<T>(this T a, T p, out bool fSuccess) where T : IBinaryInteger<T>
+	static public T SqrtMod<T>(T a, T p, out bool fSuccess) where T : IBinaryInteger<T>
 	{
 		var two = T.One + T.One;
 		var eight = T.CreateChecked(8);

@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumberTheory;
+using static NumberTheory.Primes;
 
 namespace NumberTheoryTests
 {
@@ -9,12 +10,12 @@ namespace NumberTheoryTests
 	public class PrimesTest
 	{
 		[TestMethod]
-		public void StrongPsuedoPrimeTest()
+		public void StrongPsuedoPrimeTestTest()
 		{
-			Assert.IsTrue(Primes.StrongPsuedoPrimeTest(2047L, 2L));
-			Assert.IsFalse(Primes.StrongPsuedoPrimeTest(2049L, 2L));
-			Assert.IsFalse(Primes.StrongPsuedoPrimeTest(2051L, 2L));
-			Assert.IsTrue(Primes.StrongPsuedoPrimeTest(2053L, 2L));
+			Assert.IsTrue(StrongPsuedoPrimeTest(2047L, 2L));
+			Assert.IsFalse(StrongPsuedoPrimeTest(2049L, 2L));
+			Assert.IsFalse(StrongPsuedoPrimeTest(2051L, 2L));
+			Assert.IsTrue(StrongPsuedoPrimeTest(2053L, 2L));
 		}
 
 		[TestMethod]
@@ -56,7 +57,7 @@ namespace NumberTheoryTests
 			var sv = Seive(250000);
 			for (int i = 2; i < 250000; i++)
 			{
-				Assert.IsTrue(Primes.IsPrime((long)i) != sv[i]);
+				Assert.IsTrue(((long)i).IsPrime() != sv[i]);
 			}
 			var poffs = new int[]
 				{

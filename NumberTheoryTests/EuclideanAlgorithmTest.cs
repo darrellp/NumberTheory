@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumberTheory;
+using static NumberTheory.Euclidean;
 
 namespace NumberTheoryTests
 {
@@ -9,19 +10,19 @@ namespace NumberTheoryTests
         [TestMethod]
         public void TestGCD()
         {
-            Assert.AreEqual(1L, Euclidean.GCD(97L, 18L));
-            Assert.AreEqual(6L, Euclidean.GCD(102L, 18L));
-            Assert.AreEqual(6L, Euclidean.GCD(18L, 102L));
+            Assert.AreEqual(1L, GCD(97L, 18L));
+            Assert.AreEqual(6L, GCD(102L, 18L));
+            Assert.AreEqual(6L, GCD(18L, 102L));
         }
 
         [TestMethod]
         public void TestEuclideanExt()
         {
-            var ext = Euclidean.EuclideanExt(97L, 18L);
+            var ext = ExtGCD(97L, 18L);
             Assert.AreEqual(1L, ext.GCD);
             Assert.AreEqual(-5L, ext.Coeff1);
             Assert.AreEqual(27L, ext.Coeff2);
-            ext = Euclidean.EuclideanExt(541L, 7919L);
+            ext = ExtGCD(541L, 7919L);
             Assert.AreEqual(1L, ext.GCD);
             Assert.AreEqual(-1010L, ext.Coeff1);
             Assert.AreEqual(69L, ext.Coeff2);
@@ -30,7 +31,7 @@ namespace NumberTheoryTests
         [TestMethod]
         public void TestDiophantineSolve()
         {
-            var fn = Euclidean.DiophantineSolve(13L, 51L, 500L);
+            var fn = DiophantineSolve(13L, 51L, 500L);
 
             for (var i = 1; i < 6; i++)
             {
@@ -45,7 +46,7 @@ namespace NumberTheoryTests
             var a = 123L;
             var b = 9123L;
             var mod = 321123L;
-            var solns = Euclidean.LinearCongruenceSolve(a, b, mod);
+            var solns = LinearCongruenceSolve(a, b, mod);
             Assert.AreEqual(3, solns.Length);
             foreach (var isoln in solns)
             {

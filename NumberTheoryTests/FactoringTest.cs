@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumberTheory;
+using static NumberTheory.Factoring;
 
 namespace NumberTheoryTests
 {
@@ -11,9 +12,9 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void PollardRhoTest()
 		{
-			var n = Factoring.PollardRho(49L);
+			var n = PollardRho(49L);
 			Assert.AreEqual(7L, n);
-			n = Factoring.PollardRho(10505681L, 1000);
+			n = PollardRho(10505681L, 1000);
 			Assert.IsTrue(n == 977 || n == 10753);
 		}
 
@@ -41,9 +42,9 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void DoFactoringTest()
 		{
-			Assert.IsTrue(ValidateFactors(Factoring.Factor(381151L), 563, 1, 677, 1));
-			Assert.IsTrue(ValidateFactors(Factoring.Factor(10L), 5, 1, 2, 1));
-			Assert.IsTrue(ValidateFactors(Factoring.Factor(345119L), 563, 1, 613, 1));
+			Assert.IsTrue(ValidateFactors(Factor(381151L), 563, 1, 677, 1));
+			Assert.IsTrue(ValidateFactors(Factor(10L), 5, 1, 2, 1));
+			Assert.IsTrue(ValidateFactors(Factor(345119L), 563, 1, 613, 1));
 		}
 	}
 }

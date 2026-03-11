@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumberTheory;
+using static NumberTheory.Lucas;
 
 namespace NumberTheoryTests
 {
@@ -9,8 +10,8 @@ namespace NumberTheoryTests
         [TestMethod]
         public void LucasSequenceTest()
         {
-            Assert.AreEqual(6616217487L, Lucas.LucasU(3, -1, 6616217488L, 20L));
-            Assert.AreEqual(23855111399L, Lucas.LucasV(3, -1, 23855111400L, 20L));
+            Assert.AreEqual(6616217487L, LucasU(3, -1, 6616217488L, 20L));
+            Assert.AreEqual(23855111399L, LucasV(3, -1, 23855111400L, 20L));
             var p = 1;
             var q = 2;
             var ui = 0L;
@@ -20,8 +21,8 @@ namespace NumberTheoryTests
             long bigmod = 10000000L;
             for (var i = 0; i < 10; i++)
             {
-                Assert.AreEqual(ui.Normalize(bigmod), Lucas.LucasU(p, q, bigmod, (long)i));
-                Assert.AreEqual(vi.Normalize(bigmod), Lucas.LucasV(p, q, bigmod, (long)i));
+                Assert.AreEqual(ui.Normalize(bigmod), LucasU(p, q, bigmod, (long)i));
+                Assert.AreEqual(vi.Normalize(bigmod), LucasV(p, q, bigmod, (long)i));
                 var uip1New = p * uip1 - q * ui;
                 var vip1New = p * vip1 - q * vi;
                 ui = uip1;
@@ -32,20 +33,20 @@ namespace NumberTheoryTests
         }
 
         [TestMethod]
-        public void LucasPsuedoprimeTest()
+        public void TestLucasPsuedoprime()
         {
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(100000007L));
+            Assert.IsTrue(LucasPsuedoprimeTest(100000007L));
 
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(4181L));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(6721L));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(323L));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(1891L));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(521L));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(523L));
-            Assert.IsTrue(Lucas.LucasPsuedoprimeTest(541L));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(20L));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(525L));
-            Assert.IsFalse(Lucas.LucasPsuedoprimeTest(527L));
+            Assert.IsFalse(LucasPsuedoprimeTest(4181L));
+            Assert.IsFalse(LucasPsuedoprimeTest(6721L));
+            Assert.IsFalse(LucasPsuedoprimeTest(323L));
+            Assert.IsFalse(LucasPsuedoprimeTest(1891L));
+            Assert.IsTrue(LucasPsuedoprimeTest(521L));
+            Assert.IsTrue(LucasPsuedoprimeTest(523L));
+            Assert.IsTrue(LucasPsuedoprimeTest(541L));
+            Assert.IsFalse(LucasPsuedoprimeTest(20L));
+            Assert.IsFalse(LucasPsuedoprimeTest(525L));
+            Assert.IsFalse(LucasPsuedoprimeTest(527L));
         }
     }
 }

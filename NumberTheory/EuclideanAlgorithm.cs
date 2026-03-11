@@ -61,18 +61,18 @@ public static class Euclidean
 	/// <param name="val2"> The second value. </param>
 	/// <returns>   GCD of val1 and val2 along with the coefficients to linearly combine them
 	/// to yield that GCD. </returns>
-	public static EuclideanExt<T> EuclideanExt<T>(this T val1, T val2) where T : IBinaryInteger<T>
+	public static EuclideanExt<T> ExtGCD<T>(T val1, T val2) where T : IBinaryInteger<T>
 	{
 		return new EuclideanExt<T>(val1, val2);
 	}
 
-	/// <summary>   Solve the diophantine equation ax + by = c. </summary>
-	/// <param name="a">    The value of a in ax + by = c </param>
-	/// <param name="b">    The value of b in ax + by = c. </param>
-	/// <param name="c">    The value of c in ax + by = c. </param>
-	/// <returns>   Function which returns a different solution for each different passed in integer
-	/// or null if no solution exists.</returns>
-	public static Func<T, T[]>? DiophantineSolve<T>(T a, T b, T c) where T : IBinaryInteger<T>
+    /// <summary>   Solve the diophantine equation ax + by = c. </summary>
+    /// <param name="a">    The value of a in ax + by = c </param>
+    /// <param name="b">    The value of b in ax + by = c. </param>
+    /// <param name="c">    The value of c in ax + by = c. </param>
+    /// <returns>   Function which returns a different solution for each different passed in integer
+    /// or null if no solution exists.</returns>
+    public static Func<T, T[]>? DiophantineSolve<T>(T a, T b, T c) where T : IBinaryInteger<T>
 	{
 		return DiophantineSolve(a, b, c, out _);
 	}

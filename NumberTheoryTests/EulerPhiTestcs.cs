@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumberTheory;
+using static NumberTheory.EulerPhi;
 
 namespace NumberTheoryTests
 {
@@ -15,7 +16,7 @@ namespace NumberTheoryTests
 
 			for (var i = 0; i < x.Count; i++)
 			{
-				Assert.AreEqual(y[i], EulerPhi.Phi(x[i]));
+				Assert.AreEqual(y[i], Phi(x[i]));
 			}
 		}
 	}

@@ -43,7 +43,7 @@ public static class QuadraticSieve
 
 		// for each prime found, find the square root of n mod that prime
 		bool fSuccess;
-		var sqrtList = primeList.Select(p => T.CreateChecked(p).SqrtMod(n, out fSuccess)).ToList();
+		var sqrtList = primeList.Select(p => Quadratic.SqrtMod(T.CreateChecked(p), n, out fSuccess)).ToList();
 
 		// Compute our Candidate list
 		var candidates = SieveCandidates(primeList, n);

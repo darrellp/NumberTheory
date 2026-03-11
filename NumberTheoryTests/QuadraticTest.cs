@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumberTheory;
+using static NumberTheory.Quadratic;
 
 namespace NumberTheoryTests
 {
@@ -12,9 +13,9 @@ namespace NumberTheoryTests
 			var results = new[] { 1, 0, 1, 0, 0, 0, -1, 0, 1, 0, -1, 0, 1, 0, 0, 0, -1, 0, -1, 0 };
 			for (var i = 1; i <= 20; i++)
 			{
-				Assert.AreEqual(results[i - 1], Quadratic.Jacobi(10L, (long)i));
+				Assert.AreEqual(results[i - 1], Jacobi(10L, (long)i));
 			}
-			Assert.AreEqual(1, Quadratic.Jacobi(-7L, 100000007L));
+			Assert.AreEqual(1, Jacobi(-7L, 100000007L));
 		}
 
 		[TestMethod]
