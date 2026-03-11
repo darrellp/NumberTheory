@@ -7,6 +7,8 @@ algorithm and solving linear diophantine equations, the Euler-Phi function, Luca
 solution to Pell's equation, an efficient PowerMod function, a test for primes, Quadratic residues,
 quadratic sieve (still in production), and a class for rational numbers.
 
-The library builds to handle either Longs of BigIntegers depending on an IFDEF variable.  All of
-the algorithms will handle either type.  Of course BigIntegers are a bit slower but handle
-arbitrarily large values.
+It uses IBinaryInteger for it's arguments, so it should work with any type that implements that interface,
+including BigInteger and longs.
+
+No documentation right now to speak of but a quick glance through the Tests project should give you an
+idea of how to use the various functions.
