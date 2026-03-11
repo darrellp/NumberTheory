@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NumberTheory;
 
@@ -56,7 +57,7 @@ public class ContinuedFraction<T> where T : IBinaryInteger<T>
 	{
 		Vals = vals.ToList();
 		var cnv = Convergents();
-		Val = cnv[cnv.Count - 1];
+		Val = cnv[^1];
 	}
 
 	/// <summary>
@@ -67,7 +68,7 @@ public class ContinuedFraction<T> where T : IBinaryInteger<T>
 	{
 		if (Vals.Count == 1)
 		{
-			return new List<Rational<T>> { new Rational<T>(Vals[0], T.One) };
+			return [new Rational<T>(Vals[0], T.One)];
 		}
 		var ret = new List<Rational<T>>();
 		var pm2 = Vals[0];

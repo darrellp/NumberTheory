@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 
 namespace NumberTheory;
 
@@ -111,10 +113,8 @@ public static class Lucas
 	/// <returns>	true if n appears to be a prime, false if it's definitely composite. </returns>
 	public static bool LucasPsuedoprimeTest<T>(int p, int q, T n) where T : IBinaryInteger<T>
 	{
-		int d;
-
 		// If trivially false
-		if (!LucasPrep(p, q, n, out d))
+		if (!LucasPrep(p, q, n, out var d))
 		{
 			return false;
 		}
@@ -134,10 +134,8 @@ public static class Lucas
 			return n == two;
 		}
 
-		int d, p, q;
-
 		// If trivially false
-		if (!GetLucasParameters(n, out p, out q, out d))
+		if (!GetLucasParameters(n, out var p, out var q))
 		{
 			return false;
 		}
@@ -166,9 +164,9 @@ public static class Lucas
 		return g <= 1 || T.CreateChecked(g) >= n;
 	}
 
-	static bool GetLucasParameters<T>(T n, out int p, out int q, out int d) where T : IBinaryInteger<T>
+	static bool GetLucasParameters<T>(T n, out int p, out int q) where T : IBinaryInteger<T>
 	{
-		d = Enumerable.Range(0, 1000)
+		var d = Enumerable.Range(0, 1000)
 			.Select(i => ((i & 1) == 0 ? 5 + 2 * i : -5 - 2 * i))
 			.FirstOrDefault(i => Quadratic.Jacobi(T.CreateChecked(i), n) == -1);
 		p = 1;

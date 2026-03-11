@@ -51,6 +51,7 @@ public static class Euclidean
 	/// <param name="val1"> The first value. </param>
 	/// <param name="val2"> The second value. </param>
 	/// <returns>   The LCM of the val1 and val2. </returns>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public static T LCM<T>(this T val1, T val2) where T : IBinaryInteger<T>
 	{
 		return val1 * val2 / GCD(val1, val2);
@@ -84,6 +85,7 @@ public static class Euclidean
 	/// <param name="gcd">  The returned GCD of a and b </param>
 	/// <returns>   Function which returns a different solution for each different passed in integer or
 	/// null if no solution exists.</returns>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public static Func<T, T[]>? DiophantineSolve<T>(T a, T b, T c, out T gcd) where T : IBinaryInteger<T>
 	{
 		// Do the extended Euclidean algorithm on a and b
@@ -121,7 +123,7 @@ public static class Euclidean
 		cnst2 -= q * cf2;
 
 		// Return a function which returns values which solve the equation
-		return (Func<T, T[]>)(i => new[] { cf1 * i + cnst1, cf2 * i + cnst2 });
+		return (Func<T, T[]>)(i => [cf1 * i + cnst1, cf2 * i + cnst2]);
 	}
 
 	/// <summary>   Inversion mod m. </summary>

@@ -8,5 +8,6 @@
     <Copyright>Copyright © Microsoft 2011</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 </Project>

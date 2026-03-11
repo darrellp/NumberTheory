@@ -1,10 +1,9 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace NumberTheory;
 
 /// <summary>   Static class to handle Quadratic residues and related stuff. </summary>
-static public class Quadratic
+public static class Quadratic
 {
 	/// <summary>   Returns the Jacobi symbol for the input values </summary>
 	/// <remarks>
@@ -14,7 +13,7 @@ static public class Quadratic
 	/// <param name="a">    a of (a/n) </param>
 	/// <param name="n">    n of (a/n) </param>
 	/// <returns>  The Jacobi symbol value of (a/n) </returns>
-	static public int Jacobi<T>(T a, T n) where T : IBinaryInteger<T>
+	public static int Jacobi<T>(T a, T n) where T : IBinaryInteger<T>
 	{
 		// Is n even?
 		if ((n & T.One) != T.One)
@@ -51,8 +50,7 @@ static public class Quadratic
 				break;
 			}
 
-			T r;
-			var s = rCap.TwosExponent(out r);
+			var s = rCap.TwosExponent(out var r);
 			var nCurMod8 = int.CreateChecked(nCur & T.CreateChecked(7));
 			c *= ((2 * (nCurMod8 - 1) * (int.CreateChecked(r) - 1) + s * (nCurMod8 * nCurMod8 - 1)) / 8).NegOnePower();
 			nCur = r;
@@ -69,7 +67,7 @@ static public class Quadratic
 	/// <param name="p">		The prime we're doing this modulo. </param>
 	/// <param name="fSuccess">	[out] False if there is no square root. </param>
 	/// <returns>	The square root if fSuccess is true, else indeterminate. </returns>
-	static public T SqrtMod<T>(T a, T p, out bool fSuccess) where T : IBinaryInteger<T>
+	public static T SqrtMod<T>(T a, T p, out bool fSuccess) where T : IBinaryInteger<T>
 	{
 		var two = T.One + T.One;
 		var eight = T.CreateChecked(8);
@@ -96,8 +94,7 @@ static public class Quadratic
 		var d = NonResidue(p);
 
 		// Set up A, D and m for the loop
-		T t;
-		var s = (p - T.One).TwosExponent(out t);
+		var s = (p - T.One).TwosExponent(out var t);
 		var aCap = PowerMod.Power(a, t, p);
 		var dCap = PowerMod.Power(d, t, p);
 		T m = T.Zero;

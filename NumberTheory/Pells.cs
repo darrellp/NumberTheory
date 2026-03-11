@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NumberTheory;
 
@@ -17,7 +18,7 @@ public static class Pells
 	/// <param name="x">returns smallest x for which equation is true</param>
 	/// <param name="y">returns smallest y for which equation is true</param>
 	/// <returns>false if there is no solution, else true</returns>
-	static public bool SolvePells<T>(T d, int rhs, out T x, out T y) where T : IBinaryInteger<T>
+	public static bool SolvePells<T>(T d, int rhs, out T x, out T y) where T : IBinaryInteger<T>
 	{
 		return SolvePells(d, rhs, T.One, out x, out y);
 	}
@@ -31,12 +32,11 @@ public static class Pells
 	/// <param name="x">returns x for which equation is true</param>
 	/// <param name="y">returns y for which equation is true</param>
 	/// <returns>True if we can solve, else false</returns>
-	static public bool SolvePells<T>(T d, int rhs, T k, out T x, out T y) where T : IBinaryInteger<T>
+	public static bool SolvePells<T>(T d, int rhs, T k, out T x, out T y) where T : IBinaryInteger<T>
 	{
 		var two = T.One + T.One;
 		x = y = T.Zero;
-		List<T> cnfRepeat;
-		var mtx = PellMatrix(d, out cnfRepeat);
+		var mtx = PellMatrix(d, out var cnfRepeat);
 
 		switch (rhs)
 		{
@@ -69,21 +69,21 @@ public static class Pells
 	/// <param name="d">D for Pell's equation</param>
 	/// <param name="cnfRepeat">Gives the CNF parameters for one full repeat</param>
 	/// <returns>The 2 x 2 matrix</returns>
-	static public T[] PellMatrix<T>(T d, out List<T> cnfRepeat) where T : IBinaryInteger<T>
+	public static T[] PellMatrix<T>(T d, out List<T> cnfRepeat) where T : IBinaryInteger<T>
 	{
 		T p = T.Zero;
 		T q = T.One;
-		cnfRepeat = new List<T> { d.IntegerSqrt() };
+		cnfRepeat = [d.IntegerSqrt()];
 
 		var firstTime = true;
 		while (firstTime || q != T.One)
 		{
 			firstTime = false;
-			p = cnfRepeat[cnfRepeat.Count - 1] * q - p;
+			p = cnfRepeat[^1] * q - p;
 			q = (d - p * p) / q;
 			cnfRepeat.Add((p + cnfRepeat[0]) / q);
 		}
 		var cnvVal = new ContinuedFraction<T>(cnfRepeat.Take(cnfRepeat.Count - 1)).Val;
-		return new[] { cnvVal.Num, cnvVal.Den, d * cnvVal.Den, cnvVal.Num };
+		return [cnvVal.Num, cnvVal.Den, d * cnvVal.Den, cnvVal.Num];
 	}
 }

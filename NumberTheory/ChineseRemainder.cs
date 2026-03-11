@@ -14,6 +14,7 @@ public static class ChineseRemainder
 	/// <param name="aVals">	Array of values for the a[k] in the equation above. </param>
 	/// <param name="mods">		The mods in the equation above. </param>
 	/// <returns>	Value which satisfies all the above congruencies. </returns>
+	// ReSharper disable once UnusedMember.Global
 	public static T CRT<T>(T[] aVals, T[] mods) where T : IBinaryInteger<T>
 	{
 		// Ensure that the moduli are pairwise relatively prime

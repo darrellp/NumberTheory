@@ -5,7 +5,7 @@ namespace NumberTheory;
 /// <summary>
 /// Class to determine Euler's Phi function
 /// </summary>
-static public class EulerPhi
+public static class EulerPhi
 {
 	/// <summary>
 	/// Calculate Euler's Phi function
@@ -14,7 +14,7 @@ static public class EulerPhi
 	/// <param name="seed">Seed to use for Pollard Rho factoring algorithm</param>
 	/// <param name="cIters">Iterations to use in Pollard Rho</param>
 	/// <returns>Phi(n)</returns>
-	static public T Phi<T>(T n, long seed = -1, int cIters = 10000) where T : IBinaryInteger<T>
+	public static T Phi<T>(T n, long seed = -1, int cIters = 10000) where T : IBinaryInteger<T>
 	{
 		if (n == T.One)
 		{

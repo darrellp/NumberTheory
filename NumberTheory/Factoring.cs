@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace NumberTheory;
 
@@ -38,16 +39,13 @@ public static class Factoring
 	static Random _rnd = new Random();
 	private const int MaxGathers = 10;
 
-	class PSeq<T> where T : IBinaryInteger<T>
+	private class PSeq<T> where T : IBinaryInteger<T>
 	{
-		private T X { get; set; }
-		private T Y { get; set; }
+		private T X { get; set; } = default!;
+		private T Y { get; set; } = default!;
 
-		private T Diff
-		{
-			get { return T.Abs(X - Y); }
-		}
-		private T _n;
+		private T Diff => T.Abs(X - Y);
+		private T _n = default!;
 
 		public PSeq(T n)
 		{
@@ -73,7 +71,7 @@ public static class Factoring
 			Y = F(F(Y)) % _n;
 		}
 
-		T F(T x)
+		private T F(T x)
 		{
 			return (x * x + T.One) % _n;
 		}
@@ -159,13 +157,9 @@ public static class Factoring
 
 	private static void IncDict<T>(T val, Dictionary<T, int> dict) where T : IBinaryInteger<T>
 	{
-		if (dict.ContainsKey(val))
+		if (!dict.TryAdd(val, 1))
 		{
 			dict[val]++;
-		}
-		else
-		{
-			dict[val] = 1;
 		}
 	}
 
@@ -227,7 +221,7 @@ public static class Factoring
 
 			if (factor == n || factor == -T.One)
 			{
-				throw new ArgumentException(string.Format("Unable to factor {0}", n));
+				throw new ArgumentException($"Unable to factor {n}");
 			}
 
 			trialFactors.Push(factor);

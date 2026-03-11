@@ -4,13 +4,13 @@ using System.Numerics;
 namespace NumberTheory;
 
 /// <summary>   PowerMod code for the number theory library. </summary>
-static public class PowerMod
+public static class PowerMod
 {
 	/// <summary>   Returns x^n with no modulus. </summary>
 	/// <param name="x">    Value to be exponentiated. </param>
 	/// <param name="n">    The exponent. </param>
 	/// <returns>   x^n </returns>
-	static public T Power<T>(T x, T n) where T : IBinaryInteger<T>
+	public static T Power<T>(T x, T n) where T : IBinaryInteger<T>
 	{
 		return Power(x, n, -T.One);
 	}
@@ -25,7 +25,7 @@ static public class PowerMod
 	/// <param name="n">    The exponent. </param>
 	/// <param name="mod">  The modulus. Use a value less than 2 for no modulus. </param>
 	/// <returns>   x^n Mod mod </returns>
-	static public T Power<T>(T x, T n, T mod) where T : IBinaryInteger<T>
+	public static T Power<T>(T x, T n, T mod) where T : IBinaryInteger<T>
 	{
 		var two = T.One + T.One;
 		bool fMod = mod >= two;
@@ -72,7 +72,7 @@ static public class PowerMod
 		return res;
 	}
 
-	static private T[] MatrixMultiply<T>(T[] m1, T[] m2) where T : IBinaryInteger<T>
+	private static T[] MatrixMultiply<T>(T[] m1, T[] m2) where T : IBinaryInteger<T>
 	{
 		var mRet = new T[4];
 		mRet[0] = m1[0] * m2[0] + m1[1] * m2[2];
@@ -90,15 +90,15 @@ static public class PowerMod
 	/// <param name="matrix">The matrix as an array. First two elements
 	/// is the first row and the last two are the second row.</param>
 	/// <returns>matrix^n in the same format as the input matrix</returns>
-	static public T[] MatrixPower<T>(T n, T[] matrix) where T : IBinaryInteger<T>
+	public static T[] MatrixPower<T>(T n, T[] matrix) where T : IBinaryInteger<T>
 	{
 		if (T.IsZero(n))
 		{
-			return new T[] { T.One, T.Zero, T.Zero, T.One };
+			return [T.One, T.Zero, T.Zero, T.One];
 		}
 
 		var mask = n.TopBitMask();
-		var res = new T[] { T.One, T.Zero, T.Zero, T.One };
+		T[] res = [T.One, T.Zero, T.Zero, T.One];
 
 		while ((mask & n) == T.Zero)
 		{
