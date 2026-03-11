@@ -1,6 +1,9 @@
 ## Visual Studio
 .vs/
 
+## Log files
+*.log
+
 ## Build results
 bin/
 obj/
