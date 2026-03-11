@@ -1,25 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{83C3C980-C917-471D-995E-D91E327C7004}</ProjectGuid>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NumberTheory</RootNamespace>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <Configurations>Debug;Release;BigIntegerDbg;BigIntegerRls;LongDbg;LongRls</Configurations>
+    <DefineConstants Condition="'$(Configuration)' == 'Debug'">TRACE;DEBUG;BIGINTEGER</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)' == 'Release'">TRACE;BIGINTEGER</DefineConstants>
+    <AssemblyTitle>NumberTheoryBig</AssemblyTitle>
+    <Company>Microsoft</Company>
+    <Product>NumberTheory</Product>
+    <Copyright>Copyright © Microsoft 2011</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BigIntegerDbg|AnyCPU'">
     <AssemblyName>NumberTheoryBig</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\BigIntegerDbg\</OutputPath>
     <DefineConstants>TRACE;DEBUG;BIGINTEGER</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
@@ -28,9 +25,6 @@
     <OutputPath>bin\BigIntegerRls\</OutputPath>
     <DefineConstants>TRACE;BIGINTEGER</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
@@ -39,12 +33,8 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\LongDbg\</OutputPath>
     <DefineConstants>TRACE;DEBUG;LONG</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
     <DocumentationFile>bin\LongDbg\NumberTheory.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LongRls|AnyCPU'">
@@ -52,47 +42,7 @@
     <OutputPath>bin\LongRls\</OutputPath>
     <DefineConstants>TRACE;LONG</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ChineseRemainder.cs" />
-    <Compile Include="ContinuedFraction.cs" />
-    <Compile Include="Eratosthenes.cs" />
-    <Compile Include="EuclideanAlgorithm.cs" />
-    <Compile Include="EuclideanExt.cs" />
-    <Compile Include="EulerPhi.cs" />
-    <Compile Include="Factoring.cs" />
-    <Compile Include="Lucas.cs" />
-    <Compile Include="Pells.cs" />
-    <Compile Include="PowerMod.cs" />
-    <Compile Include="Primes.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quadratic.cs" />
-    <Compile Include="QuadraticSieve.cs" />
-    <Compile Include="Rational.cs" />
-    <Compile Include="TypeAdaptation.cs" />
-    <Compile Include="Utilities.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
