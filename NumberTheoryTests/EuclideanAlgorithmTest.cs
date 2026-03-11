@@ -1,11 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#if BIGINTEGER
-using euc = NumberTheoryBig.Euclidean;
-#else
-using NumberTheoryLong;
-using euc = NumberTheoryLong.Euclidean;
-#endif
+using NumberTheory;
 
 namespace NumberTheoryTests
 {
@@ -15,49 +9,43 @@ namespace NumberTheoryTests
         [TestMethod]
         public void TestGCD()
         {
-            Assert.AreEqual(1, euc.GCD(97, 18));
-            Assert.AreEqual(6, euc.GCD(102, 18));
-            Assert.AreEqual(6, euc.GCD(18, 102));
+            Assert.AreEqual(1L, Euclidean.GCD(97L, 18L));
+            Assert.AreEqual(6L, Euclidean.GCD(102L, 18L));
+            Assert.AreEqual(6L, Euclidean.GCD(18L, 102L));
         }
 
         [TestMethod]
         public void TestEuclideanExt()
         {
-            var ext = euc.EuclideanExt(97, 18);
-            Assert.AreEqual(1,ext.GCD);
-            Assert.AreEqual(-5, ext.Coeff1);
-            Assert.AreEqual(27, ext.Coeff2);
-            ext = euc.EuclideanExt(541, 7919);
-            Assert.AreEqual(1, ext.GCD);
-            Assert.AreEqual(-1010, ext.Coeff1);
-            Assert.AreEqual(69, ext.Coeff2);
+            var ext = Euclidean.EuclideanExt(97L, 18L);
+            Assert.AreEqual(1L, ext.GCD);
+            Assert.AreEqual(-5L, ext.Coeff1);
+            Assert.AreEqual(27L, ext.Coeff2);
+            ext = Euclidean.EuclideanExt(541L, 7919L);
+            Assert.AreEqual(1L, ext.GCD);
+            Assert.AreEqual(-1010L, ext.Coeff1);
+            Assert.AreEqual(69L, ext.Coeff2);
         }
 
         [TestMethod]
         public void TestDiophantineSolve()
         {
-            var fn = euc.DiophantineSolve(13, 51, 500);
+            var fn = Euclidean.DiophantineSolve(13L, 51L, 500L);
 
             for (var i = 1; i < 6; i++)
             {
                 var sln = fn(i);
-                Assert.AreEqual(500, sln[0]*13 + sln[1]*51);
+                Assert.AreEqual(500L, sln[0] * 13 + sln[1] * 51);
             }
         }
 
         [TestMethod]
         public void TestLinearCongruenceSolve()
         {
-#if BIGINTEGER
-            var a = 6123123;
-            var b = 6123123123;
-            var mod = 9123123123123;
-#else
-            var a = 123;
-            var b = 9123;
-            var mod = 321123;
-#endif
-            var solns = euc.LinearCongruenceSolve(a,b,mod);
+            var a = 123L;
+            var b = 9123L;
+            var mod = 321123L;
+            var solns = Euclidean.LinearCongruenceSolve(a, b, mod);
             Assert.AreEqual(3, solns.Length);
             foreach (var isoln in solns)
             {

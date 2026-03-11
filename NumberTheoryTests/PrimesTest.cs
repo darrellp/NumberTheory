@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#if BIGINTEGER
-using NumberTheoryBig;
-using nt = System.Numerics.BigInteger;
-#else
-using NumberTheoryLong;
-using nt = System.Int64;
-#endif
+using NumberTheory;
 
 namespace NumberTheoryTests
 {
@@ -18,38 +11,25 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void StrongPsuedoPrimeTest()
 		{
-			Assert.IsTrue(Primes.StrongPsuedoPrimeTest(2047, 2));
-			Assert.IsFalse(Primes.StrongPsuedoPrimeTest(2049, 2));
-			Assert.IsFalse(Primes.StrongPsuedoPrimeTest(2051, 2));
-			Assert.IsTrue(Primes.StrongPsuedoPrimeTest(2053, 2));
-#if BIGINTEGER
-			for (var i = 2; i < 13; i++)
-			{
-				if (i == 11)
-				{
-					Assert.IsFalse(Primes.StrongPsuedoPrimeTest(3215031751, i));
-				}
-				else
-				{
-					Assert.IsTrue(Primes.StrongPsuedoPrimeTest(3215031751, i));
-				}
-			}
-#endif
+			Assert.IsTrue(Primes.StrongPsuedoPrimeTest(2047L, 2L));
+			Assert.IsFalse(Primes.StrongPsuedoPrimeTest(2049L, 2L));
+			Assert.IsFalse(Primes.StrongPsuedoPrimeTest(2051L, 2L));
+			Assert.IsTrue(Primes.StrongPsuedoPrimeTest(2053L, 2L));
 		}
 
 		[TestMethod]
 		public void CompositeByDivisionTest()
 		{
 			// This value is actually composite but has prime factors above where we're testing.
-			Assert.IsFalse(((nt)1022117).CompositeByDivision());
+			Assert.IsFalse(1022117L.CompositeByDivision());
 			// The rest of these should have prime factors within our range
-			Assert.IsTrue(((nt)304680).CompositeByDivision());
-			Assert.IsTrue(((nt)304681).CompositeByDivision());
-			Assert.IsTrue(((nt)304682).CompositeByDivision());
-			
-			Assert.IsFalse(((nt)191).CompositeByDivision());
-			Assert.IsTrue(((nt)192).CompositeByDivision());
-			Assert.IsFalse(((nt)193).CompositeByDivision());
+			Assert.IsTrue(304680L.CompositeByDivision());
+			Assert.IsTrue(304681L.CompositeByDivision());
+			Assert.IsTrue(304682L.CompositeByDivision());
+
+			Assert.IsFalse(191L.CompositeByDivision());
+			Assert.IsTrue(192L.CompositeByDivision());
+			Assert.IsFalse(193L.CompositeByDivision());
 		}
 
 		private bool[] Seive(int n)
@@ -76,7 +56,7 @@ namespace NumberTheoryTests
 			var sv = Seive(250000);
 			for (int i = 2; i < 250000; i++)
 			{
-				Assert.IsTrue(Primes.IsPrime(i) != sv[i]);
+				Assert.IsTrue(Primes.IsPrime((long)i) != sv[i]);
 			}
 			var poffs = new int[]
 				{
@@ -86,18 +66,15 @@ namespace NumberTheoryTests
 					799, 801, 837, 841, 853, 891, 921, 937, 939, 963, 969
 				};
 			// Identify the first 1000 primes past 100,000,000
-			var poffsComputed = 
+			var poffsComputed =
 				Enumerable.
 					Range(0, 1000).
-					Where(n => ((nt) (n + 100000000)).IsPrime()).ToArray();
+					Where(n => ((long)(n + 100000000)).IsPrime()).ToArray();
 			Assert.IsTrue(poffsComputed.Length == poffs.Length && !poffsComputed.Except(poffs).Any());
 
-			Assert.IsTrue(((nt)3).IsPrime());
-			Assert.IsTrue(((nt)2).IsPrime());
-			Assert.IsTrue(((nt)17).IsPrime());
-#if BIGINTEGER
-			Assert.IsTrue(((nt)20584996607207).IsPrime());
-#endif
+			Assert.IsTrue(3L.IsPrime());
+			Assert.IsTrue(2L.IsPrime());
+			Assert.IsTrue(17L.IsPrime());
 		}
 	}
 }

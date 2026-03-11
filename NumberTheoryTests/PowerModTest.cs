@@ -1,12 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#if BIGINTEGER
-using NumberTheoryBig;
-using nt = System.Numerics.BigInteger;
-#else
-using NumberTheoryLong;
-using nt = System.Int64;
-#endif
+using NumberTheory;
 
 namespace NumberTheoryTests
 {
@@ -16,20 +9,19 @@ namespace NumberTheoryTests
         [TestMethod]
         public void PowerModTest()
         {
-            Assert.AreEqual(3115, PowerMod.Power(2357, 2357, 3599));
-            Assert.AreEqual(5,PowerMod.Power(7,-1,17));
-			//Assert.AreEqual(1000, PowerMod.Power(10,3));
+            Assert.AreEqual(3115L, PowerMod.Power(2357L, 2357L, 3599L));
+            Assert.AreEqual(5L, PowerMod.Power(7L, -1L, 17L));
         }
 
-	    [TestMethod]
-	    public void MatrixPowerTest()
-	    {
-		    var mtx = new nt[] {18, 5, 65, 18};
-		    var res = PowerMod.MatrixPower(5, mtx);
-		    Assert.AreEqual(30349818, res[0]);
-			Assert.AreEqual(8417525, res[1]);
-			Assert.AreEqual(109427825, res[2]);
-			Assert.AreEqual(30349818, res[3]);
-		}
+        [TestMethod]
+        public void MatrixPowerTest()
+        {
+            var mtx = new long[] { 18, 5, 65, 18 };
+            var res = PowerMod.MatrixPower(5L, mtx);
+            Assert.AreEqual(30349818L, res[0]);
+            Assert.AreEqual(8417525L, res[1]);
+            Assert.AreEqual(109427825L, res[2]);
+            Assert.AreEqual(30349818L, res[3]);
+        }
     }
 }

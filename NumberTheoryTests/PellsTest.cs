@@ -1,44 +1,35 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-
-#if BIGINTEGER
-using NumberTheoryBig;
-using nt = System.Numerics.BigInteger;
-#else
-using NumberTheoryLong;
-using nt = System.Int64;
-#endif
+using NumberTheory;
 
 namespace NumberTheoryTests
 {
     [TestClass]
     public class PellsTests
     {
-	    [TestMethod]
-	    public void TestPells()
-	    {
-		    nt x, y;
-		    Pells.SolvePells(19, 1, 1, out x, out y);
-			Assert.AreEqual(170, x);
-			Assert.AreEqual(39, y);
-			Pells.SolvePells(19, 1, 2, out x, out y);
-		    Assert.AreEqual(57799, x);
-			Assert.AreEqual(13260, y);
-			Assert.IsFalse(Pells.SolvePells(19, -1, 1, out x, out y));
-			Assert.IsFalse(Pells.SolvePells(19, 7, 1, out x, out y));
-			Pells.SolvePells(13, -1, 1, out x, out y);
-			Assert.AreEqual(18, x);
-			Assert.AreEqual(5, y);
-			Pells.SolvePells(13, -1, 2, out x, out y);
-			Assert.AreEqual(23382, x);
-			Assert.AreEqual(6485, y);
-			Pells.SolvePells(13, 1, 1, out x, out y);
-			Assert.AreEqual(649, x);
-			Assert.AreEqual(180, y);
-			Pells.SolvePells(13, 1, 2, out x, out y);
-			Assert.AreEqual(842401, x);
-			Assert.AreEqual(233640, y);
-		}
+        [TestMethod]
+        public void TestPells()
+        {
+            long x, y;
+            Pells.SolvePells(19L, 1, 1L, out x, out y);
+            Assert.AreEqual(170L, x);
+            Assert.AreEqual(39L, y);
+            Pells.SolvePells(19L, 1, 2L, out x, out y);
+            Assert.AreEqual(57799L, x);
+            Assert.AreEqual(13260L, y);
+            Assert.IsFalse(Pells.SolvePells(19L, -1, 1L, out x, out y));
+            Assert.IsFalse(Pells.SolvePells(19L, 7, 1L, out x, out y));
+            Pells.SolvePells(13L, -1, 1L, out x, out y);
+            Assert.AreEqual(18L, x);
+            Assert.AreEqual(5L, y);
+            Pells.SolvePells(13L, -1, 2L, out x, out y);
+            Assert.AreEqual(23382L, x);
+            Assert.AreEqual(6485L, y);
+            Pells.SolvePells(13L, 1, 1L, out x, out y);
+            Assert.AreEqual(649L, x);
+            Assert.AreEqual(180L, y);
+            Pells.SolvePells(13L, 1, 2L, out x, out y);
+            Assert.AreEqual(842401L, x);
+            Assert.AreEqual(233640L, y);
+        }
     }
 }

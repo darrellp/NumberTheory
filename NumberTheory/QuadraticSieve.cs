@@ -1,172 +1,149 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-#if BIGINTEGER
-using nt = System.Numerics.BigInteger;
-#elif LONG
-using nt = System.Int64;
-#endif
+using System.Numerics;
 
+namespace NumberTheory;
 
-// ReSharper disable CheckNamespace
-#if BIGINTEGER
-namespace NumberTheoryBig
-#elif LONG
-namespace NumberTheoryLong
-#endif
-// ReSharper restore CheckNamespace
+/// <summary>	Class to hold the static routine implementing the quadratic sieve. </summary>
+public static class QuadraticSieve
 {
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// <summary>	Class to hold the static routine implementing the quadratic sieve. </summary>
-	///
-	/// <remarks>	Darrellp, 2/16/2011. </remarks>
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	public static class QuadraticSieve
+	/// <summary>	Factors n using a quadratic sieve</summary>
+	/// <param name="n">	The number to be factored. </param>
+	/// <returns>	A factor of the number if one exists. </returns>
+	public static T Factor<T>(T n) where T : IBinaryInteger<T>
 	{
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Factors n using a quadratic sieve</summary>
-		///
-		/// <remarks>	Darrellp, 2/16/2011. </remarks>
-		///
-		/// <param name="n">	The number to be factored. </param>
-		///
-		/// <returns>	A factor of the number if one exists. </returns>
-		////////////////////////////////////////////////////////////////////////////////////////////////////
+		var two = T.One + T.One;
 
-		public static nt Factor(nt n)
+		if ((n & T.One) == T.Zero)
 		{
-			if ((n & 1) == 0)
-			{
-				return 2;
-			}
-
-			if (n.IsPrime())
-			{
-				return n;
-			}
-
-			// Verify that n is not a power
-			var fctPower = CheckPower(n);
-
-			// If it is
-			if (fctPower > 0)
-			{
-				// Return it's root
-				return fctPower;
-			}
-
-			// Determine B for B-smooth number base
-			var b = DetermineB(n);
-
-			// Find odd primes <= B which are quadratic residues
-			var primeList = GetPrimeList(n, b);
-
-			// for each prime found, find the square root of n mod that prime
-			bool fSuccess;
-			var sqrtList = primeList.Select(p => ((nt) p).SqrtMod(n, out fSuccess)).ToList();
-
-			// Compute our Candidate list
-			var candidates = SieveCandidates(primeList, n);
-
-			// Find a set of rows that add to 0 mod 2
-			// TODO: Make this work
-
-			// Determine y from the solution found above
-			nt y = 0;
-
-			// Determine x as the product of values represented by the rows in the solution
-			nt x = 0;
-
-			// Return GCD(x - y, n) and hope for the best
-			return n.GCD(x - y);
+			return two;
 		}
 
-		private static nt CheckPower(nt n)
+		if (n.IsPrime())
 		{
-			return Enumerable.Range(3, n.BitCount()).Select(k => CheckSinglePower(n, k)).FirstOrDefault(k => k >= 0);
+			return n;
 		}
 
-		private static nt CheckSinglePower(nt n, int k)
+		// Verify that n is not a power
+		var fctPower = CheckPower(n);
+
+		// If it is
+		if (fctPower > T.Zero)
 		{
-			if (n < 4)
-			{
-				return -1;
-			}
-			var kRoot = Utilities.IntegerRoot(n, k);
-			return PowerMod.Power(kRoot, k) == n ? kRoot : -1;
+			// Return it's root
+			return fctPower;
 		}
 
-		private static IEnumerable<int[]> SieveCandidates(int[] primeList, nt n)
-		{
-			// Set sqrtN to the integer square root of n
-			var sqrtN = n.IntegerSqrt() + 1;
+		// Determine B for B-smooth number base
+		var b = DetermineB(n);
 
-			// Sieve our values out of primeList
-			return Enumerable.
-				// Get an "infinite" range of values
-				Range(0, int.MaxValue).
-				// Offset them by the square root of n
-				Select(indx => sqrtN + indx).
-				// Factor them over our factor base
-				Select(cand => CheckBSmooth(cand * cand - n, primeList)).
-				// Toss the ones that aren't  B-smooth
-				Where(lst => lst != null).
-				// Only keep K of the rest
-				Take(primeList.Length);
+		// Find odd primes <= B which are quadratic residues
+		var primeList = GetPrimeList(n, b);
+
+		// for each prime found, find the square root of n mod that prime
+		bool fSuccess;
+		var sqrtList = primeList.Select(p => T.CreateChecked(p).SqrtMod(n, out fSuccess)).ToList();
+
+		// Compute our Candidate list
+		var candidates = SieveCandidates(primeList, n);
+
+		// Find a set of rows that add to 0 mod 2
+		// TODO: Make this work
+
+		// Determine y from the solution found above
+		T y = T.Zero;
+
+		// Determine x as the product of values represented by the rows in the solution
+		T x = T.Zero;
+
+		// Return GCD(x - y, n) and hope for the best
+		return n.GCD(x - y);
+	}
+
+	private static T CheckPower<T>(T n) where T : IBinaryInteger<T>
+	{
+		return Enumerable.Range(3, n.BitCount()).Select(k => CheckSinglePower(n, k)).FirstOrDefault(k => k >= T.Zero);
+	}
+
+	private static T CheckSinglePower<T>(T n, int k) where T : IBinaryInteger<T>
+	{
+		var four = T.CreateChecked(4);
+		if (n < four)
+		{
+			return -T.One;
 		}
+		var kT = T.CreateChecked(k);
+		var kRoot = Utilities.IntegerRoot(n, kT);
+		return PowerMod.Power(kRoot, kT) == n ? kRoot : -T.One;
+	}
 
-		private static int CountFactors(ref nt cand, int p)
+	private static IEnumerable<int[]> SieveCandidates<T>(int[] primeList, T n) where T : IBinaryInteger<T>
+	{
+		// Set sqrtN to the integer square root of n
+		var sqrtN = n.IntegerSqrt() + T.One;
+
+		// Sieve our values out of primeList
+		return Enumerable.
+			// Get an "infinite" range of values
+			Range(0, int.MaxValue).
+			// Offset them by the square root of n
+			Select(indx => sqrtN + T.CreateChecked(indx)).
+			// Factor them over our factor base
+			Select(cand => CheckBSmooth(cand * cand - n, primeList)).
+			// Toss the ones that aren't B-smooth
+			Where(lst => lst != null).
+			// Only keep K of the rest
+			Take(primeList.Length);
+	}
+
+	private static int CountFactors<T>(ref T cand, int p) where T : IBinaryInteger<T>
+	{
+		var pT = T.CreateChecked(p);
+		var nCount = 0;
+		while (cand % pT == T.Zero)
 		{
-			var nCount = 0;
-			while (cand % p == 0)
-			{
-				cand /= p;
-				nCount++;
-			}
-			return nCount;
+			cand /= pT;
+			nCount++;
 		}
+		return nCount;
+	}
 
-		private static int[] CheckBSmooth(nt cand, int[] primeList)
+	private static int[] CheckBSmooth<T>(T cand, int[] primeList) where T : IBinaryInteger<T>
+	{
+		// Turn each prime in our factor base into the exponent for that prime in the candidate
+		var expList = primeList.
+			Select(fct => CountFactors(ref cand, fct)).
+			ToArray();
+
+		// If we whittled the candidate down to 1, then it's completely factored
+		return cand == T.One ? expList : null;
+	}
+
+	private static int[] GetPrimeList<T>(T n, int b) where T : IBinaryInteger<T>
+	{
+		// Set sp for convenience
+		var sp = Primes.SmallPrimes;
+
+		// Have we got enough primes in our small primes array?
+		if (b < sp[sp.Length - 1])
 		{
-			//!+ TODO: Optimize this!
-			// Turn each prime in our factor base into the exponent for that prime in the candidate
-			var expList = primeList.
-				Select(fct => CountFactors(ref cand, fct)).
+			// Filter out the non-residues and return the rest of the primes smaller than B
+			return sp.
+				Take(Array.BinarySearch(sp, (long)b)).
+				Where(cand => Quadratic.Jacobi(n, T.CreateChecked(cand)) == 1).
+				Select(bi => (int)bi).
 				ToArray();
-
-			// If we whittled the candidate down to 1, then it's completely factored
-			return cand == 1 ? expList : null;
 		}
+		//!+TODO: Implement case where we need more primes!!!
+		throw new NotImplementedException();
+	}
 
-		private static int[] GetPrimeList(nt n, int b)
-		{
-			// Set sp for convenience
-			var sp = Primes.SmallPrimes;
+	static private readonly double BExp = Math.Sqrt(2) / 4;
 
-			// Have we got enough primes in our small primes array?
-			if (b < sp[sp.Length - 1])
-			{
-				// Filter out the non-residues and return the rest of the primes smaller than B
-				return sp.
-					Take(Array.BinarySearch(sp, b)).
-					Where(cand => Quadratic.Jacobi(n, cand) == 1).
-					Select(bi => (int) bi).
-					ToArray();
-			}
-			//!+TODO: Implement case where we need more primes!!!
-			throw new NotImplementedException();
-		}
-
-		static private readonly double BExp = Math.Sqrt(2) / 4;
-
-		private static int DetermineB(nt n)
-		{
-#if BIGINTEGER
-			return (int) Math.Pow(Math.Exp(Math.Sqrt(nt.Log(n)*Math.Log(nt.Log(n)))), BExp);
-#else
-			return (int) Math.Pow(Math.Exp(Math.Sqrt(Math.Log(n) * Math.Log(Math.Log(n)))), BExp);
-#endif
-		}
+	private static int DetermineB<T>(T n) where T : IBinaryInteger<T>
+	{
+		var logN = Math.Log(double.CreateChecked(n));
+		return (int)Math.Pow(Math.Exp(Math.Sqrt(logN * Math.Log(logN))), BExp);
 	}
 }

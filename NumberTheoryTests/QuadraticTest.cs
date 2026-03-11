@@ -1,12 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#if BIGINTEGER
-using NumberTheoryBig;
-using nt = System.Numerics.BigInteger;
-#else
-using NumberTheoryLong;
-using nt = System.Int64;
-#endif
+using NumberTheory;
 
 namespace NumberTheoryTests
 {
@@ -16,12 +9,12 @@ namespace NumberTheoryTests
 		[TestMethod]
 		public void TestJacobi()
 		{
-			var results = new[] {1, 0, 1, 0, 0, 0, -1, 0, 1, 0, -1, 0, 1, 0, 0, 0, -1, 0, -1, 0};
+			var results = new[] { 1, 0, 1, 0, 0, 0, -1, 0, 1, 0, -1, 0, 1, 0, 0, 0, -1, 0, -1, 0 };
 			for (var i = 1; i <= 20; i++)
 			{
-				Assert.AreEqual(results[i - 1], Quadratic.Jacobi(10, i));
+				Assert.AreEqual(results[i - 1], Quadratic.Jacobi(10L, (long)i));
 			}
-			Assert.AreEqual(1, Quadratic.Jacobi(-7, 100000007));
+			Assert.AreEqual(1, Quadratic.Jacobi(-7L, 100000007L));
 		}
 
 		[TestMethod]
@@ -29,9 +22,9 @@ namespace NumberTheoryTests
 		{
 			bool fSuccess;
 
-			var i = Quadratic.SqrtMod(1619, 12377, out fSuccess);
+			var i = Quadratic.SqrtMod(1619L, 12377L, out fSuccess);
 			Assert.IsTrue(fSuccess);
-			Assert.AreEqual(1619, (i*i) % 12377);
+			Assert.AreEqual(1619L, (i * i) % 12377);
 		}
 	}
 }

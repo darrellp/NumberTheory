@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Configurations>Debug;Release;BigIntegerDbg;BigIntegerRls;LongDbg;LongRls</Configurations>
-    <DefineConstants Condition="'$(Configuration)' == 'Debug'">TRACE;DEBUG;BIGINTEGER</DefineConstants>
-    <DefineConstants Condition="'$(Configuration)' == 'Release'">TRACE;BIGINTEGER</DefineConstants>
     <IsTestProject>true</IsTestProject>
     <AssemblyTitle>NumberTheoryTests</AssemblyTitle>
     <Company>Microsoft</Company>
@@ -11,37 +8,6 @@
     <Copyright>Copyright © Microsoft 2011</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;BIGINTEGER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BigIntegerDbg|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\BigIntegerDbg\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;BIGINTEGER</DefineConstants>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BigIntegerRls|AnyCPU'">
-    <OutputPath>bin\BigIntegerRls\</OutputPath>
-    <DefineConstants>TRACE;BIGINTEGER</DefineConstants>
-    <Optimize>true</Optimize>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LongDbg|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\LongDbg\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;LONG</DefineConstants>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LongRls|AnyCPU'">
-    <OutputPath>bin\LongRls\</OutputPath>
-    <DefineConstants>TRACE;LONG</DefineConstants>
-    <Optimize>true</Optimize>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />

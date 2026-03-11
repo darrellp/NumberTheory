@@ -1,12 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#if BIGINTEGER
-using NumberTheoryBig;
-using nt = System.Numerics.BigInteger;
-#else
-using NumberTheoryLong;
-using nt = System.Int64;
-#endif
+using NumberTheory;
 
 namespace NumberTheoryTests
 {
@@ -16,7 +9,7 @@ namespace NumberTheoryTests
         [TestMethod]
         public void TestChineseRemainder()
         {
-            Assert.AreEqual(103, ChineseRemainder.CRT(new nt[] {1,3,5}, new nt[] {3,5,7}));
+            Assert.AreEqual(103L, ChineseRemainder.CRT(new long[] { 1, 3, 5 }, new long[] { 3, 5, 7 }));
         }
     }
 }
