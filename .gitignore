@@ -1,0 +1,15 @@
+## Visual Studio
+.vs/
+
+## Build results
+bin/
+obj/
+
+## User-specific files
+*.user
+*.suo
+*.userprefs
+
+## NuGet
+*.nupkg
+**/packages/*
