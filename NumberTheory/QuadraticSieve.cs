@@ -41,12 +41,11 @@ public static class QuadraticSieve
 		// Find odd primes <= B which are quadratic residues
 		var primeList = GetPrimeList(n, b);
 
-		// for each prime found, find the square root of n mod that prime
-		bool fSuccess;
-		var sqrtList = primeList.Select(p => Quadratic.SqrtMod(T.CreateChecked(p), n, out fSuccess)).ToList();
+        // for each prime found, find the square root of n mod that prime
+        var sqrtList = primeList.Select(p => Quadratic.SqrtMod(T.CreateChecked(p), n, out _)).ToList();
 
-		// Compute our Candidate list
-		var candidates = SieveCandidates(primeList, n);
+        // Compute our Candidate list
+        var candidates = SieveCandidates(primeList, n);
 
 		// Find a set of rows that add to 0 mod 2
 		// TODO: Make this work
@@ -128,9 +127,11 @@ public static class QuadraticSieve
 		// Have we got enough primes in our small primes array?
 		if (b < sp[sp.Length - 1])
 		{
+			var bIndex = Math.Abs(Array.BinarySearch(sp, (long)b));
+
 			// Filter out the non-residues and return the rest of the primes smaller than B
 			return sp.
-				Take(Array.BinarySearch(sp, (long)b)).
+				Take(bIndex).
 				Where(cand => Quadratic.Jacobi(n, T.CreateChecked(cand)) == 1).
 				Select(bi => (int)bi).
 				ToArray();
