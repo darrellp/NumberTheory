@@ -28,7 +28,7 @@ public class ContinuedFraction<T> where T : IBinaryInteger<T>
 	/// <param name="b">denominator</param>
 	public ContinuedFraction(T a, T b)
 	{
-		Vals = new List<T>();
+		Vals = [];
 		Val = new Rational<T>(a, b);
 		while (true)
 		{

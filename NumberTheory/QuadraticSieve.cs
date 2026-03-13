@@ -126,7 +126,7 @@ public static class QuadraticSieve
 		var sp = Primes.SmallPrimes;
 
 		// Have we got enough primes in our small primes array?
-		if (b < sp[sp.Length - 1])
+		if (b < sp[^1])
 		{
 			var bIndex = Array.BinarySearch(sp, (long)b);
 			if (bIndex < 0)
@@ -147,7 +147,7 @@ public static class QuadraticSieve
 		throw new NotImplementedException();
 	}
 
-	static private readonly double BExp = 3 * Sqrt(2) / 4;
+	private static readonly double BExp = 3 * Sqrt(2) / 4;
 
 	private static int DetermineB<T>(T n) where T : IBinaryInteger<T>
 	{

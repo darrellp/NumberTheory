@@ -164,10 +164,10 @@ public static class Lucas
 		return g <= 1 || T.CreateChecked(g) >= n;
 	}
 
-	static bool GetLucasParameters<T>(T n, out int p, out int q) where T : IBinaryInteger<T>
+	private static bool GetLucasParameters<T>(T n, out int p, out int q) where T : IBinaryInteger<T>
 	{
 		var d = Enumerable.Range(0, 1000)
-			.Select(i => ((i & 1) == 0 ? 5 + 2 * i : -5 - 2 * i))
+			.Select(i => (i & 1) == 0 ? 5 + 2 * i : -5 - 2 * i)
 			.FirstOrDefault(i => Quadratic.Jacobi(T.CreateChecked(i), n) == -1);
 		p = 1;
 		q = (1 - d) / 4;

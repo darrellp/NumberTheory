@@ -41,7 +41,7 @@ public static class Pells
 		switch (rhs)
 		{
 			case 1:
-				var kt = ((cnfRepeat.Count & 1) != 0) ? k : two * k;
+				var kt = (cnfRepeat.Count & 1) != 0 ? k : two * k;
 				var mtxp = PowerMod.MatrixPower(kt, mtx);
 				x = mtxp[0];
 				y = mtxp[1];

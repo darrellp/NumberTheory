@@ -1,5 +1,6 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 
 namespace NumberTheory;
 
@@ -14,7 +15,7 @@ public class Rational<T> where T : IBinaryInteger<T>
 	public T Num
 	{
 		get { Reduce(); return _num; }
-		private set { _num = value; }
+		private set => _num = value;
 	}
 
 	/// <summary>
@@ -23,7 +24,7 @@ public class Rational<T> where T : IBinaryInteger<T>
 	public T Den
 	{
 		get { Reduce(); return _den; }
-		private set { _den = value; }
+		private set => _den = value;
 	}
 
 	private bool _fReduced;
@@ -126,7 +127,7 @@ public class Rational<T> where T : IBinaryInteger<T>
 	/// <summary>
 	/// Addition of rationals
 	/// </summary>
-	static public Rational<T> operator +(Rational<T> r1, Rational<T> r2)
+	public static Rational<T> operator +(Rational<T> r1, Rational<T> r2)
 	{
 		return new Rational<T>(r1.Num * r2.Den + r2.Num * r1.Den, r1.Den * r2.Den);
 	}
@@ -142,7 +143,7 @@ public class Rational<T> where T : IBinaryInteger<T>
 	/// <summary>
 	/// Multiplication of rationals
 	/// </summary>
-	static public Rational<T> operator *(Rational<T> r1, Rational<T> r2)
+	public static Rational<T> operator *(Rational<T> r1, Rational<T> r2)
 	{
 		return new Rational<T>(r1.Num * r2.Num, r1.Den * r2.Den);
 	}
@@ -150,7 +151,7 @@ public class Rational<T> where T : IBinaryInteger<T>
 	/// <summary>
 	/// Division of rationals
 	/// </summary>
-	static public Rational<T> operator /(Rational<T> r1, Rational<T> r2)
+	public static Rational<T> operator /(Rational<T> r1, Rational<T> r2)
 	{
 		return new Rational<T>(r1.Num * r2.Den, r1.Den * r2.Num);
 	}
@@ -178,7 +179,7 @@ public class Rational<T> where T : IBinaryInteger<T>
 	/// </summary>
 	public override string ToString()
 	{
-		return string.Format("{0}/{1}", Num, Den);
+		return $"{Num}/{Den}";
 	}
 
 	/// <summary>
@@ -186,10 +187,6 @@ public class Rational<T> where T : IBinaryInteger<T>
 	/// </summary>
 	public static bool operator ==(Rational<T> a, Rational<T> b)
 	{
-		if ((object)a == null || (object)b == null)
-		{
-			return false;
-		}
 		return a.Den == b.Den && a.Num == b.Num;
 	}
 

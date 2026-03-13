@@ -61,7 +61,7 @@ public static class PowerMod
 			}
 			if (mod > T.Zero)
 			{
-				res = res % mod;
+				res %= mod;
 			}
 			mask >>= 1;
 		}

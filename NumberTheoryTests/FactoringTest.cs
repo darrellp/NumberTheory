@@ -45,6 +45,9 @@ namespace NumberTheoryTests
 			Assert.IsTrue(ValidateFactors(Factor(381151L), 563, 1, 677, 1));
 			Assert.IsTrue(ValidateFactors(Factor(10L), 5, 1, 2, 1));
 			Assert.IsTrue(ValidateFactors(Factor(345119L), 563, 1, 613, 1));
+			long p1 = 11593;
+			long p2 = 12907;
+			Assert.IsTrue(ValidateFactors(Factor(p1*p1*p2), p1, 2, p2, 1));
 		}
 	}
 }

@@ -21,12 +21,12 @@ public static class Utilities
 
 	internal static int NegOnePower<T>(this T n) where T : IBinaryInteger<T>
 	{
-		return ((n & T.One) == T.Zero) ? 1 : -1;
+		return (n & T.One) == T.Zero ? 1 : -1;
 	}
 
 	internal static int NegOnePower(this int n)
 	{
-		return ((n & 1) == 0) ? 1 : -1;
+		return (n & 1) == 0 ? 1 : -1;
 	}
 
 	/// <summary>	Normalizes a mod value to lie between 0 and mod-1. </summary>
@@ -37,11 +37,11 @@ public static class Utilities
 	{
 		if (n < T.Zero)
 		{
-			return n + ((mod - n - T.One) / mod) * mod;
+			return n + (mod - n - T.One) / mod * mod;
 		}
 		if (n >= mod)
 		{
-			return n - (n / mod) * mod;
+			return n - n / mod * mod;
 		}
 		return n;
 	}
@@ -82,7 +82,7 @@ public static class Utilities
 		{
 			return x;
 		}
-		return (((k - T.One) * x * xpow + n) / (k * xpow));
+		return ((k - T.One) * x * xpow + n) / (k * xpow);
 	}
 
 	/// <summary>
