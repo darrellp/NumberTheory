@@ -42,23 +42,128 @@ public static class QuadraticSieve
 		// Find odd primes <= B which are quadratic residues
 		var primeList = GetPrimeList(n, b);
 
-        // for each prime found, find the square root of n mod that prime
-        var sqrtList = primeList.Select(p => Quadratic.SqrtMod(n, T.CreateChecked(p), out _)).ToList();
+		// for each prime found, find the square root of n mod that prime
+		var sqrtList = primeList.Select(p => Quadratic.SqrtMod(n, T.CreateChecked(p), out _)).ToList();
 
-        // Compute our Candidate list
-        var candidates = SieveCandidates(primeList, n);
+		// Compute our candidate list — collect both the x values and their exponent vectors
+		var sqrtN = n.IntegerSqrt() + T.One;
+		var relations = SieveRelations(primeList, n, sqrtN).ToList();
 
-		// Find a set of rows that add to 0 mod 2
-		// TODO: Make this work
+		// Full exponent vectors are passed to Block Lanczos, which reduces mod 2 internally.
+		// We retain the full exponents in the relations for computing y = product of primes^(exp/2).
+		var fullExponents = relations.Select(r => r.Exponents).ToArray();
 
-		// Determine y from the solution found above
-		T y = T.Zero;
+		// Find null-space vectors using Block Lanczos over GF(2)
+		var nullVectors = BlockLanczos.FindNullSpace(fullExponents);
 
-		// Determine x as the product of values represented by the rows in the solution
-		T x = T.Zero;
+		// Try each null-space vector to find a non-trivial factor
+		var rowWords = (relations.Count + 63) / 64;
+		foreach (var nullVec in nullVectors)
+		{
+			var factor = TryNullVector(nullVec, relations, primeList, n);
+			if (factor > T.One && factor < n)
+			{
+				return factor;
+			}
+		}
 
-		// Return GCD(x - y, n) and hope for the best
-		return n.GCD(x - y);
+		// If Block Lanczos didn't yield a factor, fall back to trying all solutions
+		return n;
+	}
+
+	/// <summary>
+	/// Attempts to extract a non-trivial factor from a null-space vector.
+	/// The null-space vector indicates which relations to combine so that
+	/// the exponent vectors sum to zero mod 2, yielding x² ≡ y² (mod n).
+	/// </summary>
+	private static T TryNullVector<T>(ulong[] nullVec, List<Relation<T>> relations, int[] primeList, T n)
+		where T : IBinaryInteger<T>
+	{
+		// Determine which relations are selected by this null vector
+		var selectedIndices = new List<int>();
+		for (var i = 0; i < relations.Count; i++)
+		{
+			var word = i / 64;
+			var bit = i % 64;
+			if (word < nullVec.Length && (nullVec[word] & (1UL << bit)) != 0)
+			{
+				selectedIndices.Add(i);
+			}
+		}
+
+		if (selectedIndices.Count == 0)
+		{
+			return T.One;
+		}
+
+		// Compute x = product of all selected (sqrtN + offset) values mod n
+		T x = T.One;
+		foreach (var idx in selectedIndices)
+		{
+			x = MultiplyMod(x, relations[idx].XValue, n);
+		}
+
+		// Sum the exponent vectors to get the combined exponents (should all be even)
+		var combinedExponents = new int[primeList.Length];
+		foreach (var idx in selectedIndices)
+		{
+			for (var j = 0; j < primeList.Length; j++)
+			{
+				combinedExponents[j] += relations[idx].Exponents[j];
+			}
+		}
+
+		// Compute y = product of primes^(combined_exponent/2) mod n
+		T y = T.One;
+		for (var j = 0; j < primeList.Length; j++)
+		{
+			if (combinedExponents[j] > 0)
+			{
+				var halfExp = combinedExponents[j] / 2;
+				var prime = T.CreateChecked(primeList[j]);
+				y = MultiplyMod(y, PowerMod.Power(prime, T.CreateChecked(halfExp), n), n);
+			}
+		}
+
+		// Return GCD(x - y, n) — hopefully a non-trivial factor
+		var diff = (x - y) % n;
+		if (diff < T.Zero) diff += n;
+		return diff.GCD(n);
+	}
+
+	/// <summary>
+	/// Multiplies two values modulo n, avoiding overflow for large types.
+	/// </summary>
+	private static T MultiplyMod<T>(T a, T b, T n) where T : IBinaryInteger<T>
+	{
+		return (a % n) * (b % n) % n;
+	}
+
+	/// <summary>
+	/// Holds a sieve relation: the x value and its exponent vector over the factor base.
+	/// </summary>
+	private record Relation<T>(T XValue, int[] Exponents) where T : IBinaryInteger<T>;
+
+	/// <summary>
+	/// Sieves for B-smooth relations, returning both the x value and exponent vector.
+	/// Collects primeList.Length + 1 relations to guarantee a linear dependency.
+	/// </summary>
+	private static IEnumerable<Relation<T>> SieveRelations<T>(int[] primeList, T n, T sqrtN)
+		where T : IBinaryInteger<T>
+	{
+		return Enumerable.
+			// Get an "infinite" range of values
+			Range(0, int.MaxValue).
+			// Offset them by the square root of n
+			Select(indx => sqrtN + T.CreateChecked(indx)).
+			// Try to factor (x^2 - n) over the factor base
+			Select(x => new { X = x, Exp = CheckBSmooth(x * x - n, primeList) }).
+			// Toss the ones that aren't B-smooth
+			Where(r => r.Exp != null).
+			// Wrap in a Relation record
+			Select(r => new Relation<T>(r.X, r.Exp!)).
+			// Collect enough relations (one more than factor base size)
+			Take(primeList.Length + 1);
 	}
 
 	private static T CheckPower<T>(T n) where T : IBinaryInteger<T>
@@ -76,25 +181,6 @@ public static class QuadraticSieve
 		var kT = T.CreateChecked(k);
 		var kRoot = Utilities.IntegerRoot(n, kT);
 		return PowerMod.Power(kRoot, kT) == n ? kRoot : -T.One;
-	}
-
-	private static IEnumerable<int[]> SieveCandidates<T>(int[] primeList, T n) where T : IBinaryInteger<T>
-	{
-		// Set sqrtN to the integer square root of n
-		var sqrtN = n.IntegerSqrt() + T.One;
-
-		// Sieve our values out of primeList
-		return Enumerable.
-			// Get an "infinite" range of values
-			Range(0, int.MaxValue).
-			// Offset them by the square root of n
-			Select(indx => sqrtN + T.CreateChecked(indx)).
-			// Factor them over our factor base
-			Select(cand => CheckBSmooth(cand * cand - n, primeList)).
-			// Toss the ones that aren't B-smooth
-			Where(lst => lst != null).
-			// Only keep K of the rest
-			Take(primeList.Length);
 	}
 
 	private static int CountFactors<T>(ref T cand, int p) where T : IBinaryInteger<T>
@@ -143,8 +229,32 @@ public static class QuadraticSieve
 				Select(bi => (int)bi).
 				ToArray();
 		}
-		//!+TODO: Implement case where we need more primes!!!
-		throw new NotImplementedException();
+
+		// Generate all primes up to b using a Sieve of Eratosthenes
+		var sieve = new bool[b + 1];
+		// true means composite
+		for (var i = 2; (long)i * i <= b; i++)
+		{
+			if (!sieve[i])
+			{
+				for (var j = i * i; j <= b; j += i)
+				{
+					sieve[j] = true;
+				}
+			}
+		}
+
+		// Collect primes from the sieve, filtering for quadratic residues of n
+		var primes = new List<int>();
+		for (var i = 2; i <= b; i++)
+		{
+			if (!sieve[i] && Quadratic.Jacobi(n, T.CreateChecked(i)) == 1)
+			{
+				primes.Add(i);
+			}
+		}
+
+		return primes.ToArray();
 	}
 
 	private static readonly double BExp = 3 * Sqrt(2) / 4;

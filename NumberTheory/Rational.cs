@@ -187,7 +187,15 @@ public class Rational<T> where T : IBinaryInteger<T>
 	/// </summary>
 	public static bool operator ==(Rational<T> a, Rational<T> b)
 	{
-		return a.Den == b.Den && a.Num == b.Num;
+		if (a is null && b is null)
+		{
+			return true;
+        }
+		else if (a is null || b is null)
+		{
+			return false;
+        }
+        return a.Den == b.Den && a.Num == b.Num;
 	}
 
 	/// <summary>
