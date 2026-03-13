@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using static System.Math;
 
 namespace NumberTheory;
 
@@ -42,7 +43,7 @@ public static class QuadraticSieve
 		var primeList = GetPrimeList(n, b);
 
         // for each prime found, find the square root of n mod that prime
-        var sqrtList = primeList.Select(p => Quadratic.SqrtMod(T.CreateChecked(p), n, out _)).ToList();
+        var sqrtList = primeList.Select(p => Quadratic.SqrtMod(n, T.CreateChecked(p), out _)).ToList();
 
         // Compute our Candidate list
         var candidates = SieveCandidates(primeList, n);
@@ -127,11 +128,17 @@ public static class QuadraticSieve
 		// Have we got enough primes in our small primes array?
 		if (b < sp[sp.Length - 1])
 		{
-			var bIndex = Math.Abs(Array.BinarySearch(sp, (long)b));
+			var bIndex = Array.BinarySearch(sp, (long)b);
+			if (bIndex < 0)
+			{
+				// Binary search returns the next LARGEST value
+				// when we want the next smallest which introduces an offset of 1.
+				bIndex = ~bIndex - 1;
+			}
 
 			// Filter out the non-residues and return the rest of the primes smaller than B
 			return sp.
-				Take(bIndex).
+				Take(bIndex + 1).
 				Where(cand => Quadratic.Jacobi(n, T.CreateChecked(cand)) == 1).
 				Select(bi => (int)bi).
 				ToArray();
@@ -140,11 +147,11 @@ public static class QuadraticSieve
 		throw new NotImplementedException();
 	}
 
-	static private readonly double BExp = Math.Sqrt(2) / 4;
+	static private readonly double BExp = 3 * Sqrt(2) / 4;
 
 	private static int DetermineB<T>(T n) where T : IBinaryInteger<T>
 	{
-		var logN = Math.Log(double.CreateChecked(n));
-		return (int)Math.Pow(Math.Exp(Math.Sqrt(logN * Math.Log(logN))), BExp);
+		var logN = Log(double.CreateChecked(n));
+		return (int)Pow(Exp(Sqrt(logN * Log(logN))), BExp);
 	}
 }

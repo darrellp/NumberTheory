@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using static NumberTheory.PowerMod;
 
 namespace NumberTheory;
 
@@ -60,8 +61,10 @@ public static class Quadratic
 
 	/// <summary>	Takes the square root of a mod p if one exists. </summary>
 	/// <remarks>
-	/// The out parameter, fSuccess, indicates our ability to locate a square root.
-	/// This algorithm is essentially the one in the Pomerance book "Prime Numbers...".
+	/// The out parameter, fSuccess, indicates our ability to locate a square root.  It is assumed
+	/// that p is an odd prime.  No primality check is done for performance sake.
+	/// 
+	/// This algorithm is essentially algorithm 2.3.8 in the Pomerance book "Prime Numbers...".
 	/// </remarks>
 	/// <param name="a">		The number whose square root is desired </param>
 	/// <param name="p">		The prime we're doing this modulo. </param>
@@ -95,15 +98,15 @@ public static class Quadratic
 
 		// Set up A, D and m for the loop
 		var s = (p - T.One).TwosExponent(out var t);
-		var aCap = PowerMod.Power(a, t, p);
-		var dCap = PowerMod.Power(d, t, p);
+		var aCap = Power(a, t, p);
+		var dCap = Power(d, t, p);
 		T m = T.Zero;
 
 		// For each step in the halving
 		for (var iHalve = 0; iHalve < s; iHalve++)
 		{
 			// Modify m appropriately
-			var prod = (aCap * PowerMod.Power(dCap, m, p)) << (s - 1 - iHalve);
+			var prod = Power((aCap * Power(dCap, m, p)), T.One << (s - 1 - iHalve));
 
 			// If our product is congruent to -1 mod p
 			if ((prod % p) == p - T.One)
@@ -114,7 +117,7 @@ public static class Quadratic
 		}
 
 		// Return our square root
-		return (PowerMod.Power(a, (t + T.One) / two, p) * PowerMod.Power(dCap, m / two, p)) % p;
+		return (Power(a, (t + T.One) / two, p) * Power(dCap, m / two, p)) % p;
 	}
 
 	private static T NonResidue<T>(T p) where T : IBinaryInteger<T>
@@ -141,22 +144,22 @@ public static class Quadratic
 		var four = two + two;
 		var eight = four + four;
 
-		// if a is congruent to 5 mod 8
-		if ((a % eight) == T.CreateChecked(5))
+		// if p is congruent to 5 mod 8
+		if ((p % eight) == T.CreateChecked(5))
 		{
-			x = PowerMod.Power(a, (p + T.CreateChecked(3)) / eight, p);
+			x = Power(a, (p + T.CreateChecked(3)) / eight, p);
 
 			// If the current value of x is not a square root
 			if (x * x % p != a % p)
 			{
 				// Modify it
-				x = (x * PowerMod.Power(two, (p - T.One) / four, p)) % p;
+				x = (x * Power(two, (p - T.One) / four, p)) % p;
 			}
 		}
 		else
 		{
 			// Simple case when a is congruent to 3 or 7 mod 8
-			x = PowerMod.Power(a, (p + T.One) / four, p);
+			x = Power(a, (p + T.One) / four, p);
 		}
 		return x;
 	}

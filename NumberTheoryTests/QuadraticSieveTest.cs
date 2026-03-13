@@ -12,8 +12,8 @@ namespace NumberTheoryTests
 			Assert.AreEqual(2L, QuadraticSieve.Factor(10L));
 			Assert.AreEqual(23L, QuadraticSieve.Factor(23L));
 			Assert.AreEqual(3L, QuadraticSieve.Factor(243L));
-			//var factor = QuadraticSieve.Factor(7907L * 7919L);
-			//Assert.IsTrue(factor == 7907L || factor == 7919L);
+			var factor = QuadraticSieve.Factor(15347); // 7907L * 7919L);
+			Assert.IsTrue(factor == 7907L || factor == 7919L);
         }
 	}
 }

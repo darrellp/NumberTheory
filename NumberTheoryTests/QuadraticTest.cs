@@ -23,9 +23,24 @@ namespace NumberTheoryTests
 		{
 			bool fSuccess;
 
-			var i = Quadratic.SqrtMod(1619L, 12377L, out fSuccess);
-			Assert.IsTrue(fSuccess);
-			Assert.AreEqual(1619L, (i * i) % 12377);
+			TestSqrtModCase(1620L, 12377L);
+			TestSqrtModCase(15347L, 17L);
+			TestSqrtModCase(15347L, 29L);
+			TestSqrtModCase(1619L, 12377L);
+			TestSqrtModCase(1621L, 12377L);
+			TestSqrtModCase(1622L, 12377L);
+			TestSqrtModCase(1623L, 12377L);
+			TestSqrtModCase(1624L, 12377L);
+			TestSqrtModCase(1625L, 12377L);
+			TestSqrtModCase(1626L, 12377L);
+		}
+
+		private void TestSqrtModCase(long a, long p) 
+		{
+			Assert.IsTrue(p.IsPrime());
+			var i = SqrtMod(a, p, out var fSuccess);
+			if (!fSuccess) return;
+			Assert.AreEqual(a % p, (i * i) % p);
 		}
 	}
 }
