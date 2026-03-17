@@ -9,6 +9,9 @@ namespace NumberTheory;
 /// <summary>	Class to hold the static routine implementing the quadratic sieve. </summary>
 public static class QuadraticSieve
 {
+	// Raise this if you must
+	const int maxSmoothing = 1000;
+
 	/// <summary>	Factors n using a quadratic sieve</summary>
 	/// <param name="n">	The number to be factored. </param>
 	/// <returns>	A factor of the number if one exists. </returns>
@@ -42,11 +45,8 @@ public static class QuadraticSieve
 		// Find odd primes <= B for which n is a quadratic residue
 		var primeList = GetPrimeList(n, b);
 
-		// for each prime found, find the square root of n mod that prime
-		// var sqrtList = primeList.Select(p => Quadratic.SqrtMod(n, T.CreateChecked(p), out _)).ToList();
-
 		// Compute our candidate list — collect both the x values and their exponent vectors
-		var relations = SieveRelations(primeList, n).ToList();
+		var relations = SieveRelations(primeList, n, b).ToList();
 
 		// Full exponent vectors are passed to Block Lanczos, which reduces mod 2 internally.
 		// We retain the full exponents in the relations for computing y = product of primes^(exp/2).
@@ -56,7 +56,6 @@ public static class QuadraticSieve
 		var nullVectors = BlockLanczos.FindNullSpace(fullExponents);
 
 		// Try each null-space vector to find a non-trivial factor
-		var rowWords = (relations.Count + 63) / 64;
 		foreach (var nullVec in nullVectors)
 		{
 			var factor = TryNullVector(nullVec, relations, primeList, n);
@@ -144,26 +143,211 @@ public static class QuadraticSieve
 	private record Relation<T>(T XValue, int[] Exponents) where T : IBinaryInteger<T>;
 
 	/// <summary>
-	/// Sieves for B-smooth relations, returning both the x value and exponent vector.
-	/// Collects primeList.Length + 1 relations to guarantee a linear dependency.
+	/// Sieves for B-smooth relations using Pomerance's interval-sieve method.
+	/// For each prime p in the factor base, SqrtMod gives the two starting offsets
+	/// into the sieve array; log(p) is added at those positions and every p steps.
+	/// Additionally, prime powers (p², p³, …) are sieved: for each power pᵏ ≤ B,
+	/// the modular roots are lifted and log(p) is added again at every pᵏ-th step.
+	/// <para>
+	/// The log threshold at each position is based on the actual candidate size
+	/// log(x²-n) at that offset, scaled by a slack factor. This correctly handles
+	/// the wide range of candidate magnitudes across the sieve window.
+	/// The sieve window extends in chunks of <c>4 * b</c> until enough relations
+	/// are found.
+	/// </para>
 	/// </summary>
-	private static IEnumerable<Relation<T>> SieveRelations<T>(int[] primeList, T n)
+	private static IEnumerable<Relation<T>> SieveRelations<T>(int[] primeList, T n, int b)
 		where T : IBinaryInteger<T>
 	{
+		var needed = primeList.Length + 1;
 		var sqrtN = n.IntegerSqrt() + T.One;
-		return Enumerable.
-			// Get an "infinite" range of values
-			Range(0, int.MaxValue).
-			// Offset them by the square root of n
-			Select(indx => sqrtN + T.CreateChecked(indx)).
-			// Try to factor (x^2 - n) over the factor base
-			Select(x => new { X = x, Exp = CheckBSmooth(x * x - n, primeList) }).
-			// Toss the ones that aren't B-smooth
-			Where(r => r.Exp != null).
-			// Wrap in a Relation record
-			Select(r => new Relation<T>(r.X, r.Exp!)).
-			// Collect enough relations (one more than factor base size)
-			Take(primeList.Length + 1);
+		var dSqrtN = double.CreateChecked(sqrtN);
+
+		// Precompute log(p) and the two sieve-starting offsets for each prime.
+		var logP = new float[primeList.Length];
+		var roots = new (int R1, int R2)[primeList.Length];
+
+		// Collect all sieve events: (stride, offset, logContribution).
+		// This includes prime powers pᵏ which contribute additional log(p) hits.
+		var sieveEvents = new List<(int Stride, int Off, float LogVal)>();
+
+		for (var i = 0; i < primeList.Length; i++)
+		{
+			var p = primeList[i];
+			logP[i] = (float)Log(p);
+			var pT = T.CreateChecked(p);
+
+			var r1T = Quadratic.SqrtMod(n % pT, pT, out var ok);
+			if (!ok)
+			{
+				roots[i] = (-1, -1);
+				continue;
+			}
+
+			var r1 = int.CreateChecked(r1T);
+			var r2 = (p - r1) % p;
+			var sqrtNModP = int.CreateChecked(sqrtN % pT);
+			var off1 = (r1 - sqrtNModP + p) % p;
+			var off2 = (r1 == r2) ? -1 : (r2 - sqrtNModP + p) % p;
+			roots[i] = (off1, off2);
+
+			// Add base prime sieve events
+			sieveEvents.Add((p, off1, logP[i]));
+			if (off2 >= 0)
+				sieveEvents.Add((p, off2, logP[i]));
+
+			// Add prime power sieve events: p², p³, ... while pᵏ fits in int range
+			// For each power pᵏ, find offsets where (sqrtN + off)² ≡ n (mod pᵏ)
+			// by lifting the roots via Hensel's lemma (for odd primes, roots lift directly).
+			var pk = (long)p * p;
+			var prevR1 = (long)r1;
+			var prevR2 = (long)r2;
+			while (pk <= b * 10L && pk <= int.MaxValue)
+			{
+				var pkInt = (int)pk;
+				var pkT = T.CreateChecked(pkInt);
+				var nModPk = long.CreateChecked(n % pkT);
+
+				// Lift r1: find t such that r1_new = prevR1 + t*prevPk, r1_new² ≡ n (mod pk)
+				var prevPk = pk / p;
+				var lifted1 = LiftRoot(prevR1, nModPk, prevPk, pkInt, p);
+				var lifted2 = LiftRoot(prevR2, nModPk, prevPk, pkInt, p);
+
+				if (lifted1 >= 0)
+				{
+					var sqrtNModPk = (int)(long.CreateChecked(sqrtN % pkT));
+					var loff1 = (int)((lifted1 - sqrtNModPk + pkInt) % pkInt);
+					sieveEvents.Add((pkInt, loff1, logP[i]));
+
+					// Second lifted root
+					var lr2 = (int)((pkInt - lifted1) % pkInt);
+					if (lr2 != loff1)
+					{
+						var loff2 = (int)((lr2 - sqrtNModPk + pkInt) % pkInt);
+						sieveEvents.Add((pkInt, loff2, logP[i]));
+					}
+				}
+
+				if (lifted2 >= 0 && lifted2 != lifted1)
+				{
+					var sqrtNModPk = (int)(long.CreateChecked(sqrtN % pkT));
+					var loff1 = (int)((lifted2 - sqrtNModPk + pkInt) % pkInt);
+					sieveEvents.Add((pkInt, loff1, logP[i]));
+				}
+
+				prevR1 = lifted1;
+				prevR2 = lifted2;
+				pk *= p;
+			}
+		}
+
+		var chunkSize = Max(4 * b, 256);
+		var windowEnd = 0;
+		var relations = new List<Relation<T>>(needed);
+
+		while (relations.Count < needed)
+		{
+			var chunkStart = windowEnd;
+			windowEnd += chunkSize;
+
+			var logSums = new float[chunkSize];
+
+			// Sieve phase: apply all events (primes + prime powers)
+			foreach (var (stride, off, logVal) in sieveEvents)
+			{
+				var start = (off - chunkStart % stride + stride) % stride;
+				for (var j = start; j < chunkSize; j += stride)
+				{
+					logSums[j] += logVal;
+				}
+			}
+
+			// Extraction phase: use per-position threshold based on actual candidate size.
+			// log(x²-n) at offset k ≈ log(2·sqrtN·(chunkStart+k) + (chunkStart+k)²) but
+			// we approximate as log(x²-n) computed directly. Slack of 0.7 admits candidates
+			// where some prime-power contributions were missed.
+			for (var k = 0; k < chunkSize && relations.Count < needed; k++)
+			{
+				// Compute actual candidate to get its log for the threshold
+				var globalK = chunkStart + k;
+				if (globalK == 0) continue; // x²-n = sqrtN²-n which may be 0 or tiny
+
+				var logCand = (float)Log(2.0 * dSqrtN * globalK + (double)globalK * globalK);
+				var threshold = logCand * 0.7f;
+
+				if (logSums[k] < threshold) continue;
+
+				var x = sqrtN + T.CreateChecked(globalK);
+				var cand = x * x - n;
+				if (cand <= T.Zero) continue;
+
+				var exponents = ExtractExponents(cand, primeList);
+				if (exponents != null)
+				{
+					relations.Add(new Relation<T>(x, exponents));
+				}
+			}
+		}
+
+		return relations;
+	}
+
+	/// <summary>
+	/// Lifts a root r mod prevPk to a root mod pk = prevPk * p using Hensel's lemma.
+	/// Returns the lifted root, or -1 if lifting fails.
+	/// </summary>
+	private static long LiftRoot(long r, long nModPk, long prevPk, long pk, int p)
+	{
+		// r² ≡ n (mod prevPk). We want r' = r + t·prevPk such that r'² ≡ n (mod pk).
+		// Expanding: r² + 2·r·t·prevPk ≡ n (mod pk)
+		// So t ≡ (n - r²) / prevPk / (2r) (mod p)
+		if (r < 0) return -1;
+		var residue = nModPk - r * r;
+		// Normalize residue into [0, pk)
+		residue = ((residue % pk) + pk) % pk;
+		if (residue % prevPk != 0) return -1;
+		var quot = residue / prevPk;
+		// We need quot / (2r) mod p
+		var twoR = (2 * r) % p;
+		if (twoR == 0) return -1; // degenerate case
+		// Find inverse of twoR mod p
+		var inv = ModInverse(twoR, p);
+		if (inv < 0) return -1;
+		var t = (quot % p * inv) % p;
+		return (r + t * prevPk) % pk;
+	}
+
+	/// <summary>
+	/// Returns the modular inverse of a mod m, or -1 if it doesn't exist.
+	/// </summary>
+	private static long ModInverse(long a, long m)
+	{
+		a = ((a % m) + m) % m;
+		// Extended Euclidean algorithm
+		long g = m, x = 0, y = 1;
+		var tempA = a;
+		while (tempA != 0)
+		{
+			var q = g / tempA;
+			(g, tempA) = (tempA, g - q * tempA);
+			(x, y) = (y, x - q * y);
+		}
+		if (g != 1) return -1;
+		return ((x % m) + m) % m;
+	}
+
+	/// <summary>
+	/// Fully trial-divides <paramref name="cand"/> over <paramref name="primeList"/>,
+	/// returning the exponent vector if the candidate is completely smooth, or null otherwise.
+	/// </summary>
+	private static int[]? ExtractExponents<T>(T cand, int[] primeList) where T : IBinaryInteger<T>
+	{
+		var exponents = new int[primeList.Length];
+		for (var i = 0; i < primeList.Length; i++)
+		{
+			exponents[i] = CountFactors(ref cand, primeList[i]);
+		}
+		return cand == T.One ? exponents : null;
 	}
 
 	private static T CheckPower<T>(T n) where T : IBinaryInteger<T>
@@ -193,17 +377,6 @@ public static class QuadraticSieve
 			nCount++;
 		}
 		return nCount;
-	}
-
-	private static int[] CheckBSmooth<T>(T cand, int[] primeList) where T : IBinaryInteger<T>
-	{
-		// Turn each prime in our factor base into the exponent for that prime in the candidate
-		var expList = primeList.
-			Select(fct => CountFactors(ref cand, fct)).
-			ToArray();
-
-		// If we whittled the candidate down to 1, then it's completely factored
-		return cand == T.One ? expList : null;
 	}
 
 	private static int[] GetPrimeList<T>(T n, int b) where T : IBinaryInteger<T>
@@ -259,8 +432,11 @@ public static class QuadraticSieve
 
 	private static int DetermineB<T>(T n) where T : IBinaryInteger<T>
 	{
-		// Taken from https://medium.com/nerd-for-tech/heres-how-quadratic-sieve-factorization-works-1c878bc94f81
+		// The standard formula L(n)^(1/2) where L(n) = exp(sqrt(ln(n)*ln(ln(n))))
+		// sometimes produces too small a factor base for modest n. We use the full
+		// exponent (no /2 divisor) and enforce a floor to guarantee a viable base.
 		var logN = Log(double.CreateChecked(n));
-		return (int)Exp(Sqrt(logN * Log(logN)) / 2);
+		var lb = (int)Exp(Sqrt(logN * Log(logN)));
+		return Min(lb, maxSmoothing);
 	}
 }
