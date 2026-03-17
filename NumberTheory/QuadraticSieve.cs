@@ -39,15 +39,14 @@ public static class QuadraticSieve
 		// Determine B for B-smooth number base
 		var b = DetermineB(n);
 
-		// Find odd primes <= B which are quadratic residues
+		// Find odd primes <= B for which n is a quadratic residue
 		var primeList = GetPrimeList(n, b);
 
 		// for each prime found, find the square root of n mod that prime
-		var sqrtList = primeList.Select(p => Quadratic.SqrtMod(n, T.CreateChecked(p), out _)).ToList();
+		// var sqrtList = primeList.Select(p => Quadratic.SqrtMod(n, T.CreateChecked(p), out _)).ToList();
 
 		// Compute our candidate list — collect both the x values and their exponent vectors
-		var sqrtN = n.IntegerSqrt() + T.One;
-		var relations = SieveRelations(primeList, n, sqrtN).ToList();
+		var relations = SieveRelations(primeList, n).ToList();
 
 		// Full exponent vectors are passed to Block Lanczos, which reduces mod 2 internally.
 		// We retain the full exponents in the relations for computing y = product of primes^(exp/2).
@@ -148,9 +147,10 @@ public static class QuadraticSieve
 	/// Sieves for B-smooth relations, returning both the x value and exponent vector.
 	/// Collects primeList.Length + 1 relations to guarantee a linear dependency.
 	/// </summary>
-	private static IEnumerable<Relation<T>> SieveRelations<T>(int[] primeList, T n, T sqrtN)
+	private static IEnumerable<Relation<T>> SieveRelations<T>(int[] primeList, T n)
 		where T : IBinaryInteger<T>
 	{
+		var sqrtN = n.IntegerSqrt() + T.One;
 		return Enumerable.
 			// Get an "infinite" range of values
 			Range(0, int.MaxValue).
@@ -257,11 +257,10 @@ public static class QuadraticSieve
 		return primes.ToArray();
 	}
 
-	private static readonly double BExp = 3 * Sqrt(2) / 4;
-
 	private static int DetermineB<T>(T n) where T : IBinaryInteger<T>
 	{
+		// Taken from https://medium.com/nerd-for-tech/heres-how-quadratic-sieve-factorization-works-1c878bc94f81
 		var logN = Log(double.CreateChecked(n));
-		return (int)Pow(Exp(Sqrt(logN * Log(logN))), BExp);
+		return (int)Exp(Sqrt(logN * Log(logN)) / 2);
 	}
 }

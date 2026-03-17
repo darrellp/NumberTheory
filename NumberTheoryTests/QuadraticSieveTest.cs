@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumberTheory;
+using System.Numerics;
 
 namespace NumberTheoryTests
 {
@@ -14,6 +15,8 @@ namespace NumberTheoryTests
 			Assert.AreEqual(3L, QuadraticSieve.Factor(243L));
 			var factor = QuadraticSieve.Factor(7907L * 7919L);
 			Assert.IsTrue(factor == 7907L || factor == 7919L);
+			// var bigValue = new BigInteger(long.MaxValue - 12);
+			// var bigFactor = QuadraticSieve.Factor(bigValue);
         }
 	}
 }
