@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System;
+using System.ComponentModel;
+using System.Numerics;
 
 namespace NumberTheory;
 
@@ -161,5 +163,26 @@ public static class Utilities
 	public static T TopBitMask<T>(this T n) where T : IBinaryInteger<T>
 	{
 		return T.IsZero(n) ? T.Zero : T.One << (BitCount(n) - 1);
+	}
+	
+	/// <summary>
+	/// Returns true if numerator divides denominator
+	/// </summary>
+	/// <param name="numerator">	The top number in the fraction. </param>
+	/// <param name="denominator">	The bottom number in the fraction. </param>
+	/// <returns>	true if the numerator can be divided by the numerator </returns>
+	public static bool Divides<T>(this T numerator, T denominator) where T : IBinaryInteger<T>
+	{
+		return (numerator / denominator) * denominator == numerator;
+	}
+
+	public static T PositiveMod<T>(this T val, T mod) where T : IBinaryInteger<T>
+	{
+		var divT = T.Abs(mod);
+		if (val < T.Zero)
+		{
+			return val + (T.One - val / divT) * mod;
+		}
+		return divT % val;
 	}
 }
