@@ -165,7 +165,6 @@ public static class QuadraticSieve
 
 		// Precompute log(p) and the two sieve-starting offsets for each prime.
 		var logP = new float[primeList.Length];
-		var roots = new (int R1, int R2)[primeList.Length];
 
 		// Collect all sieve events: (stride, offset, logContribution).
 		// This includes prime powers pᵏ which contribute additional log(p) hits.
@@ -177,19 +176,12 @@ public static class QuadraticSieve
 			logP[i] = (float)Log(p);
 			var pT = T.CreateChecked(p);
 
-			var r1T = Quadratic.SqrtMod(n % pT, pT, out var ok);
-			if (!ok)
-			{
-				roots[i] = (-1, -1);
-				continue;
-			}
-
+			var r1T = Quadratic.SqrtMod(n % pT, pT, out var _);
 			var r1 = int.CreateChecked(r1T);
 			var r2 = (p - r1) % p;
 			var sqrtNModP = int.CreateChecked(sqrtN % pT);
 			var off1 = (r1 - sqrtNModP + p) % p;
 			var off2 = (r1 == r2) ? -1 : (r2 - sqrtNModP + p) % p;
-			roots[i] = (off1, off2);
 
 			// Add base prime sieve events
 			sieveEvents.Add((p, off1, logP[i]));
@@ -223,7 +215,7 @@ public static class QuadraticSieve
 					var lr2 = (int)((pkInt - lifted1) % pkInt);
 					if (lr2 != loff1)
 					{
-						var loff2 = (int)((lr2 - sqrtNModPk + pkInt) % pkInt);
+						var loff2 = (lr2 - sqrtNModPk + pkInt) % pkInt;
 						sieveEvents.Add((pkInt, loff2, logP[i]));
 					}
 				}
@@ -357,8 +349,7 @@ public static class QuadraticSieve
 
 	private static T CheckSinglePower<T>(T n, int k) where T : IBinaryInteger<T>
 	{
-		var four = T.CreateChecked(4);
-		if (n < four)
+		if (n < T.CreateChecked(4))
 		{
 			return -T.One;
 		}
