@@ -35,7 +35,7 @@ public static class ChineseRemainder
 			Zip(aVals, (m, a) => a * m).
 			Aggregate((acc, val) => acc + val) % mult;
 	}
-	
+
 	/// <summary>
 	/// Implements the Chinese Remainder Theorem. This version of the algorithm only works for
 	/// pairwise coprime moduli. This algorithm solves for x a set of simultaneous congruencies of
@@ -43,6 +43,7 @@ public static class ChineseRemainder
 	/// </summary>
 	/// <param name="aVals">	Array of values for the a[k] in the equation above. </param>
 	/// <param name="mods">		The mods in the equation above. </param>
+	/// <param name="success">	True if a solution exists, false if there is no such solution </param>
 	/// <returns>	Value which satisfies all the above congruencies. </returns>
 	// ReSharper disable once UnusedMember.Global
 	public static (T value, T modulus) CRTStrong<T>(T[] aVals, T[] mods, out bool success) where T : IBinaryInteger<T>
@@ -69,7 +70,9 @@ public static class ChineseRemainder
 		return ret;
 	}
 
+	// ReSharper disable InconsistentNaming
 	private static (T value, T mod) CRTStrongTwo<T>((T,T) a1m1, (T,T)a2m2, out bool success) where T : IBinaryInteger<T>
+	// ReSharper restore InconsistentNaming
 	{
 		var a = a1m1.Item1;
 		var m = a1m1.Item2;
@@ -85,7 +88,7 @@ public static class ChineseRemainder
 
 		var lambda = (a - b) / gcd;
 		var eucExt = Euclidean.ExtGCD(m, n);
-		var (u, v) = (eucExt.Coeff1, eucExt.Coeff2);
+		var u = eucExt.Coeff1;
 		var modRet = m.LCM(n);
 		var valRet = (a - m * u * lambda).PositiveMod(modRet);
 

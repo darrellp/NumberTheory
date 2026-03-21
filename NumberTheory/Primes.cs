@@ -31,7 +31,11 @@ public static class Primes
 	/// <returns>   true implies n is composite, false if the test is indeterminate. </returns>
 	public static bool CompositeByDivision<T>(this T n) where T : IBinaryInteger<T>
 	{
-		return SmallPrimes.Any(p => n != T.CreateChecked(p) && n % T.CreateChecked(p) == T.Zero);
+		return SmallPrimes.Any(p =>
+		{
+			var pVal = T.CreateChecked(p);
+			return n != pVal && n % pVal == T.Zero;
+		});
 	}
 
 	/// <summary>   Simple pseudoprime algorithm to determine if p passes the b-pseudoprime test. </summary>
@@ -65,6 +69,7 @@ public static class Primes
 			return true;
 		}
 
+		var two = T.One + T.One;
 		for (var i = 0; i < s; i++)
 		{
 			if (bp == T.One)
@@ -75,7 +80,7 @@ public static class Primes
 			{
 				return true;
 			}
-			bp = PowerMod.Power(bp, T.One + T.One, n);
+			bp = PowerMod.Power(bp, two, n);
 		}
 		return false;
 	}

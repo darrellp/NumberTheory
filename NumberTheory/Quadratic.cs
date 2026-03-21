@@ -40,7 +40,8 @@ public static class Quadratic
 		var gcd = a;
 		var nCur = n;
 		var c = 1;
-
+		var seven = T.CreateChecked(7);
+		
 		while (true)
 		{
 			var rCap = gcd % nCur;
@@ -52,7 +53,7 @@ public static class Quadratic
 			}
 
 			var s = rCap.TwosExponent(out var r);
-			var nCurMod8 = int.CreateChecked(nCur & T.CreateChecked(7));
+			var nCurMod8 = int.CreateChecked(nCur & seven);
 			c *= ((2 * (nCurMod8 - 1) * (int.CreateChecked(r) - 1) + s * (nCurMod8 * nCurMod8 - 1)) / 8).NegOnePower();
 			nCur = r;
 		}
