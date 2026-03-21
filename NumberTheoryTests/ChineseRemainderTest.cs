@@ -15,13 +15,14 @@ namespace NumberTheoryTests
         [TestMethod]
         public void TestStrongChineseRemainder()
         {
-            var (val, mod) = CRTStrong(
-                [3, 5], [10, 12], out bool success);
+            var (val, mod) = CRTStrong([3, 5], [10, 12], out bool success);
             
             Assert.IsTrue(success);
             Assert.AreEqual(53, val);
             Assert.AreEqual(60, mod);
+            
+            CRTStrong([3, 6], [10, 12], out success);
+            Assert.IsFalse(success);
         }
-
     }
 }
