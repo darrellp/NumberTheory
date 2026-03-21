@@ -16,11 +16,15 @@ namespace NumberTheoryTests
         public void TestStrongChineseRemainder()
         {
             var (val, mod) = CRTStrong([3, 5], [10, 12], out bool success);
-            
             Assert.IsTrue(success);
             Assert.AreEqual(53, val);
             Assert.AreEqual(60, mod);
-            
+
+            (val, mod) = CRTStrong([2, 2, 6, 11], [6, 8, 10, 15], out success);
+            Assert.IsTrue(success);
+            Assert.AreEqual(26, val);
+            Assert.AreEqual(120, mod);
+
             CRTStrong([3, 6], [10, 12], out success);
             Assert.IsFalse(success);
         }

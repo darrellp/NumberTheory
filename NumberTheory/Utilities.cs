@@ -183,6 +183,6 @@ public static class Utilities
 		{
 			return val + (T.One - val / divT) * mod;
 		}
-		return divT % val;
+		return val % mod;
 	}
 }

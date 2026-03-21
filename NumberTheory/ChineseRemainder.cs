@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Formats.Asn1;
 using System.Linq;
 using System.Numerics;
@@ -89,6 +90,7 @@ public static class ChineseRemainder
 		var valRet = (a - m * u * lambda).PositiveMod(modRet);
 
 		success = true;
+		// Debug.WriteLine($"a: {a} b: {b} m: {m} n: {n} valRet: {valRet} modRet: {modRet}");
 		return (valRet, modRet);
 	}
 }
