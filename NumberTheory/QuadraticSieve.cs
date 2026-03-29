@@ -10,7 +10,7 @@ namespace NumberTheory;
 public static class QuadraticSieve
 {
 	// Raise this if you must
-	const int maxSmoothing = 1000;
+	const int maxSmoothing = 2000;
 
 	/// <summary>	Factors n using a quadratic sieve</summary>
 	/// <param name="n">	The number to be factored. </param>

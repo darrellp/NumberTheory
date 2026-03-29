@@ -66,8 +66,9 @@ public static class Utilities
 		var x = T.One << ((n.BitCount() + 1) / 2);
 		T y;
 
+		var two = T.One + T.One;
 		// Loop through Newton's method
-		while (x > (y = (x + n / x) / (T.One + T.One)))
+		while (x > (y = (x + n / x) / two))
 		{
 			// x[i] = x[i-1]
 			x = y;

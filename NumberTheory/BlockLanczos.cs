@@ -8,6 +8,10 @@ namespace NumberTheory;
 /// Implements algorithms over GF(2) to find vectors in the null space
 /// of a binary matrix. Used by the Quadratic Sieve to find dependencies among
 /// exponent vectors modulo 2.
+/// 
+/// Is this really Block-Lanczos?  It's more of a standard Gaussian elimination over GF(2) with bit-packing
+/// it seems to me.
+/// 
 /// </summary>
 public static class BlockLanczos
 {
