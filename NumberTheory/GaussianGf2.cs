@@ -5,15 +5,15 @@ using System.Numerics;
 namespace NumberTheory;
 
 /// <summary>
-/// Implements algorithms over GF(2) to find vectors in the null space
+/// Implements Gaussian algorithms over GF(2) to find vectors in the null space
 /// of a binary matrix. Used by the Quadratic Sieve to find dependencies among
 /// exponent vectors modulo 2.
 /// 
-/// Is this really Block-Lanczos?  It's more of a standard Gaussian elimination over GF(2) with bit-packing
-/// it seems to me.
-/// 
+/// I'd like to implement Block-Lanczos but even AI backs off from it claiming it's
+/// "overkill" for "these size problems" and "notoriously difficult".  So for the moment
+/// we're using Gaussian elimination.
 /// </summary>
-public static class BlockLanczos
+public static class GaussianGf2
 {
 	/// <summary>
 	/// Finds null-space vectors of the matrix formed by the exponent vectors mod 2.

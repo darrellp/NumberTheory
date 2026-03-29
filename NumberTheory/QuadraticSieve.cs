@@ -10,7 +10,7 @@ namespace NumberTheory;
 public static class QuadraticSieve
 {
 	// Raise this if you must
-	const int maxSmoothing = 2000;
+	const int maxSmoothing = 3000;
 
 	/// <summary>	Factors n using a quadratic sieve</summary>
 	/// <param name="n">	The number to be factored. </param>
@@ -53,7 +53,7 @@ public static class QuadraticSieve
 		var fullExponents = relations.Select(r => r.Exponents).ToArray();
 
 		// Find null-space vectors using Block Lanczos over GF(2)
-		var nullVectors = BlockLanczos.FindNullSpace(fullExponents);
+		var nullVectors = GaussianGf2.FindNullSpace(fullExponents);
 
 		// Try each null-space vector to find a non-trivial factor
 		foreach (var nullVec in nullVectors)
