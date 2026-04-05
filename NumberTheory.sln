@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberTheoryBenchmarks", "NumberTheoryBenchmarks\NumberTheoryBenchmarks.csproj", "{A569FDCA-8FCD-6ABF-4C1F-399ACAF87FEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,8 +28,15 @@ Global
 		{D0021046-DD30-419C-9786-010F5684E775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0021046-DD30-419C-9786-010F5684E775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0021046-DD30-419C-9786-010F5684E775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A569FDCA-8FCD-6ABF-4C1F-399ACAF87FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A569FDCA-8FCD-6ABF-4C1F-399ACAF87FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A569FDCA-8FCD-6ABF-4C1F-399ACAF87FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A569FDCA-8FCD-6ABF-4C1F-399ACAF87FEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6BE3F9EA-CA82-4726-95CE-9609329ECD20}
 	EndGlobalSection
 EndGlobal

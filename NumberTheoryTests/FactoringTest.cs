@@ -16,6 +16,8 @@ namespace NumberTheoryTests
 			Assert.AreEqual(7L, n);
 			n = PollardRho(10505681L, 1000);
 			Assert.IsTrue(n == 977 || n == 10753);
+			n = PollardRho(7907L * 7919L);
+			Assert.IsTrue(n == 7907 || n == 7919);
 		}
 
 		bool FindFactor(long prime, int exp, List<PrimeFactor<long>> factorization)
